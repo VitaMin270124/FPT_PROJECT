@@ -9,12 +9,6 @@
  * @param[in] priority:         The priority level for the interrupt (0 is highest priority).
  */
 
-void NVIC_Init(const Nvic_ConfigType *config)
-{
-    NVIC_SetPriority(config->interruptNumber, config->priority);
-    NVIC_EnableInterrupt(config->interruptNumber);
-}
-
  void NVIC_EnableInterrupt(uint8_t interruptNumber)
 {
     if (interruptNumber < NVIC_MAX_INTERRUPT_NUMBER) 

@@ -1,0 +1,8 @@
+../Core/Src/Nvic.c:12:6:NVIC_Init	1
+../Core/Src/Nvic.c:18:7:NVIC_EnableInterrupt	2
+../Core/Src/Nvic.c:26:6:NVIC_DisableInterrupt	2
+../Core/Src/Nvic.c:34:6:NVIC_SetPending	2
+../Core/Src/Nvic.c:42:6:NVIC_ClearPending	2
+../Core/Src/Nvic.c:50:9:NVIC_GetActive	2
+../Core/Src/Nvic.c:59:6:NVIC_SetPriority	2
+../Core/Src/Nvic.c:67:9:NVIC_GetPriority	2

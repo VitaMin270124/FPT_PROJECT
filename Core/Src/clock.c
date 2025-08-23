@@ -1,33 +1,58 @@
-#include "stm32f1xx.h"
+#include "clock.h"
 
-/**
- * @brief Function to initialize system clock using HSI as the clock source.
- *
- * This function configures the system to use High-Speed Internal (HSI) as the clock source,
- * and sets up the PLL (Phase-Locked Loop) to enhance the system clock.
- * It will configure the following:
- * 1. Enable HSI (High-Speed Internal) oscillator.
- * 2. Configure the PLL to use HSI as its input (no division).
- * 3. Set the PLL multiplier to 9 for the system clock.
- * 4. Switch the system clock to PLL once it is stable.
- *
- * After calling this function, the system clock will be running at a higher speed,
- * driven by the PLL configured from HSI, improving the performance of the MCU.
- */
-void Clock_Init(void) {
-    // Bật HSI (High-Speed Internal) Oscillator
-    RCC->CR |= RCC_CR_HSION;      // Bật HSI
-    while (!(RCC->CR & RCC_CR_HSIRDY)) {}  // Chờ HSI ổn định
+/* Function to initialize the system clock */
+void clock_init(void) {
+    /* Enable HSI (High-Speed Internal) */
+    RCC_CR |= RCC_CR_HSION;
 
-    // Cấu hình PLL để sử dụng HSI làm nguồn cho PLL (không chia đôi)
-    RCC->CFGR |= RCC_CFGR_PLLSRC;  // Chọn HSI làm nguồn cho PLL
-    RCC->CFGR |= RCC_CFGR_PLLMULL9; // Nhân PLL với 9 để có tốc độ xung cao hơn
-    RCC->CR |= RCC_CR_PLLON;       // Bật PLL
-    while (!(RCC->CR & RCC_CR_PLLRDY)) {}  // Chờ PLL ổn định
+    /* Wait for HSI to be ready */
+    while (!(RCC_CR & RCC_CR_HSION));
 
-    // Chuyển hệ thống clock sang PLL
-    RCC->CFGR |= RCC_CFGR_SW_PLL;  // Chọn PLL làm nguồn clock cho hệ thống
+    /* Select HSI as system clock source */
+    RCC_CFGR &= ~RCC_CFGR_SW;
+    RCC_CFGR |= (0x0 << RCC_CFGR_SW);
 
-    // Đảm bảo hệ thống đang sử dụng PLL
-    while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {}
+    /* Enable PLL (Phase-Locked Loop) */
+    RCC_CR |= RCC_CR_PLLON;
+    while (!(RCC_CR & RCC_CR_PLLON));
+}
+
+/* Function to enable a peripheral clock */
+void clock_enable_peripheral(uint32_t peripheral) {
+    if (peripheral == RCC_APB1RSTR_TIM2RST) {
+        RCC_APB1RSTR |= RCC_APB1RSTR_TIM2RST;
+    } else if (peripheral == RCC_APB2RSTR_USART1RST) {
+        RCC_APB2RSTR |= RCC_APB2RSTR_USART1RST;
+    }
+}
+
+/* Function to get the clock source of a specific peripheral */
+uint32_t clock_get_peripheral(uint32_t peripheral) {
+    if (peripheral == RCC_APB1RSTR_TIM2RST) {
+        return (RCC_CFGR & RCC_CFGR_SWS);
+    } else if (peripheral == RCC_APB2RSTR_USART1RST) {
+        return (RCC_CFGR & RCC_CFGR_SWS);
+    }
+    return 0;
+}
+
+/* Function to get the current clock speed of a specified bus */
+uint32_t clock_get_bus(uint32_t bus_type) {
+    switch (bus_type) {
+        case 0: // AHB
+            return (RCC_CFGR & RCC_CFGR_HPRE);
+        case 1: // APB1
+            return (RCC_CFGR & RCC_CFGR_SWS);
+        case 2: // APB2
+            return (RCC_CFGR & RCC_CFGR_SWS);
+        case 3: // SYS
+            return clock_get_system();
+        default:
+            return 0;
+    }
+}
+
+/* Function to get the system clock speed */
+uint32_t clock_get_system(void) {
+    return (RCC_CFGR & RCC_CFGR_SWS);
 }

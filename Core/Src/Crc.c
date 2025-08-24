@@ -1,10 +1,12 @@
 #include "Crc.h"
-#include "Rcc_Registers.h"
+#include "Clock_Registers.h"
 
 
 void CRC_Init(void) {
     /* Enable CRC clock in RCC (AHBENR bit 6 = CRCEN) */
     RCC->AHBENR |= (1U << 6U);
+    
+    
 
     /* Reset CRC calculation unit */
     CRC_Reset();

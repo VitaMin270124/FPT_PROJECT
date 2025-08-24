@@ -1,8 +1,7 @@
-../Core/Src/Nvic.c:12:6:NVIC_Init	16	static
-../Core/Src/Nvic.c:18:7:NVIC_EnableInterrupt	16	static
-../Core/Src/Nvic.c:26:6:NVIC_DisableInterrupt	16	static
-../Core/Src/Nvic.c:34:6:NVIC_SetPending	16	static
-../Core/Src/Nvic.c:42:6:NVIC_ClearPending	16	static
-../Core/Src/Nvic.c:50:9:NVIC_GetActive	16	static
-../Core/Src/Nvic.c:59:6:NVIC_SetPriority	16	static
-../Core/Src/Nvic.c:67:9:NVIC_GetPriority	16	static
+../Core/Src/Nvic.c:12:7:NVIC_EnableInterrupt	16	static
+../Core/Src/Nvic.c:20:6:NVIC_DisableInterrupt	16	static
+../Core/Src/Nvic.c:28:6:NVIC_SetPending	16	static
+../Core/Src/Nvic.c:36:6:NVIC_ClearPending	16	static
+../Core/Src/Nvic.c:44:9:NVIC_GetActive	16	static
+../Core/Src/Nvic.c:53:6:NVIC_SetPriority	16	static
+../Core/Src/Nvic.c:61:9:NVIC_GetPriority	16	static

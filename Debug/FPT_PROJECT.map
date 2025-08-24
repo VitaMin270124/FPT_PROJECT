@@ -53,6 +53,90 @@ Discarded input sections
  .ARM.exidx     0x00000000       0x10 D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/crt0.o
  .ARM.attributes
                 0x00000000       0x1b D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/crt0.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Clock.o
+ .text          0x00000000        0x0 ./Core/Src/Clock.o
+ .data          0x00000000        0x0 ./Core/Src/Clock.o
+ .bss           0x00000000        0x0 ./Core/Src/Clock.o
+ .text.clock_init
+                0x00000000       0x5c ./Core/Src/Clock.o
+ .text.clock_enable_peripheral
+                0x00000000       0x40 ./Core/Src/Clock.o
+ .text.clock_get_peripheral
+                0x00000000       0x3c ./Core/Src/Clock.o
+ .text.clock_get_bus
+                0x00000000       0x58 ./Core/Src/Clock.o
+ .text.clock_get_system
+                0x00000000       0x18 ./Core/Src/Clock.o
+ .debug_info    0x00000000      0x1b0 ./Core/Src/Clock.o
+ .debug_abbrev  0x00000000      0x112 ./Core/Src/Clock.o
+ .debug_aranges
+                0x00000000       0x40 ./Core/Src/Clock.o
+ .debug_rnglists
+                0x00000000       0x2b ./Core/Src/Clock.o
+ .debug_macro   0x00000000       0x7c ./Core/Src/Clock.o
+ .debug_macro   0x00000000      0xacc ./Core/Src/Clock.o
+ .debug_macro   0x00000000       0x22 ./Core/Src/Clock.o
+ .debug_macro   0x00000000       0x8e ./Core/Src/Clock.o
+ .debug_macro   0x00000000       0x51 ./Core/Src/Clock.o
+ .debug_macro   0x00000000      0x103 ./Core/Src/Clock.o
+ .debug_macro   0x00000000       0x6a ./Core/Src/Clock.o
+ .debug_macro   0x00000000      0x1df ./Core/Src/Clock.o
+ .debug_macro   0x00000000       0x52 ./Core/Src/Clock.o
+ .debug_line    0x00000000      0x512 ./Core/Src/Clock.o
+ .debug_str     0x00000000     0x3f6d ./Core/Src/Clock.o
+ .comment       0x00000000       0x44 ./Core/Src/Clock.o
+ .debug_frame   0x00000000       0xc4 ./Core/Src/Clock.o
+ .ARM.attributes
+                0x00000000       0x2d ./Core/Src/Clock.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .group         0x00000000        0xc ./Core/Src/Crc.o
+ .text          0x00000000        0x0 ./Core/Src/Crc.o
+ .data          0x00000000        0x0 ./Core/Src/Crc.o
+ .bss           0x00000000        0x0 ./Core/Src/Crc.o
+ .text.CRC_Init
+                0x00000000       0x1c ./Core/Src/Crc.o
+ .text.CRC_Reset
+                0x00000000       0x18 ./Core/Src/Crc.o
+ .text.CRC_Calculate
+                0x00000000       0x40 ./Core/Src/Crc.o
+ .debug_info    0x00000000      0x224 ./Core/Src/Crc.o
+ .debug_abbrev  0x00000000      0x113 ./Core/Src/Crc.o
+ .debug_aranges
+                0x00000000       0x30 ./Core/Src/Crc.o
+ .debug_rnglists
+                0x00000000       0x1f ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x8e ./Core/Src/Crc.o
+ .debug_macro   0x00000000      0xacc ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x22 ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x8e ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x51 ./Core/Src/Crc.o
+ .debug_macro   0x00000000      0x103 ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x6a ./Core/Src/Crc.o
+ .debug_macro   0x00000000      0x1df ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x10 ./Core/Src/Crc.o
+ .debug_macro   0x00000000      0x190 ./Core/Src/Crc.o
+ .debug_macro   0x00000000       0x58 ./Core/Src/Crc.o
+ .debug_line    0x00000000      0x4a9 ./Core/Src/Crc.o
+ .debug_str     0x00000000     0x431a ./Core/Src/Crc.o
+ .comment       0x00000000       0x44 ./Core/Src/Crc.o
+ .debug_frame   0x00000000       0x70 ./Core/Src/Crc.o
+ .ARM.attributes
+                0x00000000       0x2d ./Core/Src/Crc.o
  .group         0x00000000        0xc ./Core/Src/Nvic.o
  .group         0x00000000        0xc ./Core/Src/Nvic.o
  .group         0x00000000        0xc ./Core/Src/Nvic.o
@@ -64,8 +148,6 @@ Discarded input sections
  .text          0x00000000        0x0 ./Core/Src/Nvic.o
  .data          0x00000000        0x0 ./Core/Src/Nvic.o
  .bss           0x00000000        0x0 ./Core/Src/Nvic.o
- .text.NVIC_Init
-                0x00000000       0x2a ./Core/Src/Nvic.o
  .text.NVIC_EnableInterrupt
                 0x00000000       0x40 ./Core/Src/Nvic.o
  .text.NVIC_DisableInterrupt
@@ -80,12 +162,12 @@ Discarded input sections
                 0x00000000       0x34 ./Core/Src/Nvic.o
  .text.NVIC_GetPriority
                 0x00000000       0x38 ./Core/Src/Nvic.o
- .debug_info    0x00000000      0x2c9 ./Core/Src/Nvic.o
- .debug_abbrev  0x00000000      0x10c ./Core/Src/Nvic.o
+ .debug_info    0x00000000      0x25d ./Core/Src/Nvic.o
+ .debug_abbrev  0x00000000       0xf4 ./Core/Src/Nvic.o
  .debug_aranges
-                0x00000000       0x58 ./Core/Src/Nvic.o
+                0x00000000       0x50 ./Core/Src/Nvic.o
  .debug_rnglists
-                0x00000000       0x3d ./Core/Src/Nvic.o
+                0x00000000       0x37 ./Core/Src/Nvic.o
  .debug_macro   0x00000000       0x82 ./Core/Src/Nvic.o
  .debug_macro   0x00000000      0xacc ./Core/Src/Nvic.o
  .debug_macro   0x00000000       0x22 ./Core/Src/Nvic.o
@@ -95,10 +177,10 @@ Discarded input sections
  .debug_macro   0x00000000       0x6a ./Core/Src/Nvic.o
  .debug_macro   0x00000000      0x1df ./Core/Src/Nvic.o
  .debug_macro   0x00000000       0x10 ./Core/Src/Nvic.o
- .debug_line    0x00000000      0x54a ./Core/Src/Nvic.o
- .debug_str     0x00000000     0x3ec3 ./Core/Src/Nvic.o
+ .debug_line    0x00000000      0x532 ./Core/Src/Nvic.o
+ .debug_str     0x00000000     0x3ea2 ./Core/Src/Nvic.o
  .comment       0x00000000       0x44 ./Core/Src/Nvic.o
- .debug_frame   0x00000000      0x14c ./Core/Src/Nvic.o
+ .debug_frame   0x00000000      0x128 ./Core/Src/Nvic.o
  .ARM.attributes
                 0x00000000       0x2d ./Core/Src/Nvic.o
  .group         0x00000000        0xc ./Core/Src/main.o
@@ -145,6 +227,7 @@ Discarded input sections
  .debug_macro   0x00000000      0x103 ./Core/Src/main.o
  .debug_macro   0x00000000       0x6a ./Core/Src/main.o
  .debug_macro   0x00000000      0x1df ./Core/Src/main.o
+ .debug_macro   0x00000000      0x190 ./Core/Src/main.o
  .group         0x00000000        0xc ./Core/Src/stm32f1xx_hal_msp.o
  .group         0x00000000        0xc ./Core/Src/stm32f1xx_hal_msp.o
  .group         0x00000000        0xc ./Core/Src/stm32f1xx_hal_msp.o
@@ -1965,6 +2048,8 @@ Linker script and memory map
 LOAD D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7-m/nofp/crti.o
 LOAD D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7-m/nofp/crtbegin.o
 LOAD D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/crt0.o
+LOAD ./Core/Src/Clock.o
+LOAD ./Core/Src/Crc.o
 LOAD ./Core/Src/Nvic.o
 LOAD ./Core/Src/main.o
 LOAD ./Core/Src/stm32f1xx_hal_msp.o
@@ -2387,7 +2472,7 @@ LOAD D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_rnglists
                 0x00000206       0x6c ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
 
-.debug_macro    0x00000000    0x1484a
+.debug_macro    0x00000000    0x146ba
  .debug_macro   0x00000000      0x18e ./Core/Src/main.o
  .debug_macro   0x0000018e      0x209 ./Core/Src/main.o
  .debug_macro   0x00000397       0x2e ./Core/Src/main.o
@@ -2399,29 +2484,28 @@ LOAD D:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x00001205     0xe09e ./Core/Src/main.o
  .debug_macro   0x0000f2a3       0x6d ./Core/Src/main.o
  .debug_macro   0x0000f310     0x34a2 ./Core/Src/main.o
- .debug_macro   0x000127b2      0x190 ./Core/Src/main.o
- .debug_macro   0x00012942       0x5c ./Core/Src/main.o
- .debug_macro   0x0001299e      0x5bc ./Core/Src/main.o
- .debug_macro   0x00012f5a      0x289 ./Core/Src/main.o
- .debug_macro   0x000131e3      0x1cb ./Core/Src/main.o
- .debug_macro   0x000133ae      0x114 ./Core/Src/main.o
- .debug_macro   0x000134c2      0x1b2 ./Core/Src/main.o
- .debug_macro   0x00013674       0x27 ./Core/Src/main.o
- .debug_macro   0x0001369b      0x136 ./Core/Src/main.o
- .debug_macro   0x000137d1      0x1bc ./Core/Src/main.o
- .debug_macro   0x0001398d       0x34 ./Core/Src/main.o
- .debug_macro   0x000139c1       0x3c ./Core/Src/main.o
- .debug_macro   0x000139fd       0x57 ./Core/Src/main.o
- .debug_macro   0x00013a54       0x87 ./Core/Src/main.o
- .debug_macro   0x00013adb      0x240 ./Core/Src/main.o
- .debug_macro   0x00013d1b      0x140 ./Core/Src/main.o
- .debug_macro   0x00013e5b       0x83 ./Core/Src/main.o
- .debug_macro   0x00013ede      0x18e ./Core/Src/stm32f1xx_hal_msp.o
- .debug_macro   0x0001406c      0x198 ./Core/Src/stm32f1xx_it.o
- .debug_macro   0x00014204      0x184 ./Core/Src/system_stm32f1xx.o
- .debug_macro   0x00014388      0x1a8 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o
- .debug_macro   0x00014530      0x184 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.o
- .debug_macro   0x000146b4      0x196 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
+ .debug_macro   0x000127b2       0x5c ./Core/Src/main.o
+ .debug_macro   0x0001280e      0x5bc ./Core/Src/main.o
+ .debug_macro   0x00012dca      0x289 ./Core/Src/main.o
+ .debug_macro   0x00013053      0x1cb ./Core/Src/main.o
+ .debug_macro   0x0001321e      0x114 ./Core/Src/main.o
+ .debug_macro   0x00013332      0x1b2 ./Core/Src/main.o
+ .debug_macro   0x000134e4       0x27 ./Core/Src/main.o
+ .debug_macro   0x0001350b      0x136 ./Core/Src/main.o
+ .debug_macro   0x00013641      0x1bc ./Core/Src/main.o
+ .debug_macro   0x000137fd       0x34 ./Core/Src/main.o
+ .debug_macro   0x00013831       0x3c ./Core/Src/main.o
+ .debug_macro   0x0001386d       0x57 ./Core/Src/main.o
+ .debug_macro   0x000138c4       0x87 ./Core/Src/main.o
+ .debug_macro   0x0001394b      0x240 ./Core/Src/main.o
+ .debug_macro   0x00013b8b      0x140 ./Core/Src/main.o
+ .debug_macro   0x00013ccb       0x83 ./Core/Src/main.o
+ .debug_macro   0x00013d4e      0x18e ./Core/Src/stm32f1xx_hal_msp.o
+ .debug_macro   0x00013edc      0x198 ./Core/Src/stm32f1xx_it.o
+ .debug_macro   0x00014074      0x184 ./Core/Src/system_stm32f1xx.o
+ .debug_macro   0x000141f8      0x1a8 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o
+ .debug_macro   0x000143a0      0x184 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.o
+ .debug_macro   0x00014524      0x196 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
 
 .debug_line     0x00000000     0x3f80
  .debug_line    0x00000000      0x715 ./Core/Src/main.o

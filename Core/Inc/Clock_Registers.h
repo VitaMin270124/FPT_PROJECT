@@ -1,5 +1,5 @@
-#ifndef RCC_REGISTERS_H
-#define RCC_REGISTERS_H
+#ifndef CLOCK_REGISTERS_H
+#define CLOCK_REGISTERS_H
 
 #include <stdint.h>
 

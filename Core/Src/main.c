@@ -40,8 +40,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE BEGIN PV */
+uint32_t page_addr = 0x0801F800;
 
 /* USER CODE END PV */
 
@@ -65,7 +65,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -91,12 +90,32 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Infinite loop */
+
+  // Erase page
+  FLASH_ErasePage(page_addr);
+  // Verify: đọc lại page
+  for (int i = 0; i < 256; i++) {
+    if (*(volatile uint32_t*)(page_addr + i*4) != 0xFFFFFFFF) {
+	   printf("Erase failed at addr 0x%08lX\r\n", page_addr + i*4);
+	}
+  }
+
+//  // Write page
+//  FLASH_ProgramHalfWord(page_addr, 0x1234);
+//  FLASH_ProgramHalfWord(page_addr + 2, 0xABCD);
+//
+//  // Verify
+//  if (*(volatile uint16_t*)page_addr == 0x1234 &&
+//      *(volatile uint16_t*)(page_addr + 2) == 0xABCD) {
+//      printf("Program OK\r\n");
+//  } else {
+//      printf("Program FAIL\r\n");
+//  }
+
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Đảo trạng thái chân PC13
-	HAL_Delay(500);                         // Delay 500ms
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

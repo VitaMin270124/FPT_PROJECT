@@ -52,6 +52,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 FPT_PROJECT.list \
 
+OBJCOPY_BIN += \
+FPT_PROJECT.bin \
+
 
 # All Target
 all: main-build
@@ -60,8 +63,8 @@ all: main-build
 main-build: FPT_PROJECT.elf secondary-outputs
 
 # Tool invocations
-FPT_PROJECT.elf FPT_PROJECT.map: $(OBJS) $(USER_OBJS) C:\Users\Minh\Desktop\FPT_PROJECT\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "FPT_PROJECT.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Minh\Desktop\FPT_PROJECT\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FPT_PROJECT.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+FPT_PROJECT.elf FPT_PROJECT.map: $(OBJS) $(USER_OBJS) C:\Users\Minh\Desktop\workspace\FPT_PROJECT\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "FPT_PROJECT.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Minh\Desktop\workspace\FPT_PROJECT\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FPT_PROJECT.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -75,12 +78,17 @@ FPT_PROJECT.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+FPT_PROJECT.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "FPT_PROJECT.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) FPT_PROJECT.elf FPT_PROJECT.list FPT_PROJECT.map default.size.stdout
+	-$(RM) FPT_PROJECT.bin FPT_PROJECT.elf FPT_PROJECT.list FPT_PROJECT.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

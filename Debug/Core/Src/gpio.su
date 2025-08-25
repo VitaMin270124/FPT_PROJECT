@@ -1,0 +1,5 @@
+../Core/Src/gpio.c:13:6:GPIO_Clock_Enable	16	static
+../Core/Src/gpio.c:23:6:GPIO_Pin_Configure	24	static
+../Core/Src/gpio.c:40:6:GPIO_Pin_Set	16	static
+../Core/Src/gpio.c:44:6:GPIO_Pin_Reset	16	static
+../Core/Src/gpio.c:48:6:GPIO_Pin_Toggle	16	static

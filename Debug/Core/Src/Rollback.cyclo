@@ -1,0 +1,4 @@
+../Core/Src/Rollback.c:50:6:Rollback_Backup_Firmware	2
+../Core/Src/Rollback.c:64:6:Rollback_Commit_New_Firmware	2
+../Core/Src/Rollback.c:81:6:Rollback_Restore_Firmware	1
+../Core/Src/Rollback.c:91:5:Rollback_Check_Status	1

@@ -1,15 +1,28 @@
 #ifndef CLOCK_REGISTERS_H
 #define CLOCK_REGISTERS_H
 
-#include "stdint.h"
+#include <stdint.h>
 
-/* RCC (Reset and Clock Control) Register Definitions */
-#define RCC_CR         (*(volatile uint32_t *)0x40021000)    /* RCC Control Register */
-#define RCC_CFGR       (*(volatile uint32_t *)0x40021004)    /* RCC Clock Configuration Register */
-#define RCC_APB1RSTR   (*(volatile uint32_t *)0x4002101C)    /* RCC APB1 Reset Register */
-#define RCC_APB2RSTR   (*(volatile uint32_t *)0x40021018)    /* RCC APB2 Reset Register */
-#define RCC_BDCR       (*(volatile uint32_t *)0x40021020)    /* RCC Backup Domain Control Register */
-#define RCC_CSR        (*(volatile uint32_t *)0x40021024)    /* RCC Control/Status Register */
+/** RCC Register Map */
+typedef struct
+{
+    volatile uint32_t CR;        /**< Clock control register,              offset 0x00 */
+    volatile uint32_t CFGR;      /**< Clock configuration register,        offset 0x04 */
+    volatile uint32_t CIR;       /**< Clock interrupt register,            offset 0x08 */
+    volatile uint32_t APB2RSTR;  /**< APB2 peripheral reset register,      offset 0x0C */
+    volatile uint32_t APB1RSTR;  /**< APB1 peripheral reset register,      offset 0x10 */
+    volatile uint32_t AHBENR;    /**< AHB peripheral clock enable register offset 0x14 */
+    volatile uint32_t APB2ENR;   /**< APB2 peripheral clock enable register offset 0x18 */
+    volatile uint32_t APB1ENR;   /**< APB1 peripheral clock enable register offset 0x1C */
+    volatile uint32_t BDCR;      /**< Backup domain control register,      offset 0x20 */
+    volatile uint32_t CSR;       /**< Control/status register,             offset 0x24 */
+} RCC_TypeDef;
+
+/** RCC base address */
+#define RCC_BASE_ADDRESS (0x40021000u)
+
+/** RCC pointer */
+#define RCC ((RCC_TypeDef *)RCC_BASE_ADDRESS)
 
 /* RCC_CR Bits */
 #define RCC_CR_HSION   (1 << 0)      /* HSI On */

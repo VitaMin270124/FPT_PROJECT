@@ -1,7 +1,7 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
-#include "clock_registers.h"
+#include <Clock_Registers.h>
 
 /**
  * @brief Initialize the system clock and configure necessary peripherals

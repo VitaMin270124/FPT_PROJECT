@@ -1,0 +1,5 @@
+../Core/Src/Clock.c:4:6:clock_init	4	static
+../Core/Src/Clock.c:21:6:clock_enable_peripheral	16	static
+../Core/Src/Clock.c:30:10:clock_get_peripheral	16	static
+../Core/Src/Clock.c:40:10:clock_get_bus	16	static
+../Core/Src/Clock.c:56:10:clock_get_system	4	static

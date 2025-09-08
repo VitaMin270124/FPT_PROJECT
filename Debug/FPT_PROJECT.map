@@ -92,7 +92,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x6a ./Core/Src/Timer.o
  .debug_macro   0x00000000      0x1df ./Core/Src/Timer.o
  .debug_macro   0x00000000       0x46 ./Core/Src/Timer.o
- .debug_line    0x00000000      0x4d7 ./Core/Src/Timer.o
+ .debug_line    0x00000000      0x4e3 ./Core/Src/Timer.o
  .debug_str     0x00000000     0x3f45 ./Core/Src/Timer.o
  .comment       0x00000000       0x44 ./Core/Src/Timer.o
  .debug_frame   0x00000000       0xe0 ./Core/Src/Timer.o

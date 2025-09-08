@@ -1,0 +1,5 @@
+../Core/Src/FLASH_module.c:19:6:FLASH_Unlock	4	static
+../Core/Src/FLASH_module.c:26:6:FLASH_Lock	4	static
+../Core/Src/FLASH_module.c:30:10:FLASH_ReadHalfWord	16	static
+../Core/Src/FLASH_module.c:38:5:FLASH_ProgramHalfWord	16	static
+../Core/Src/FLASH_module.c:67:5:FLASH_ErasePage	16	static

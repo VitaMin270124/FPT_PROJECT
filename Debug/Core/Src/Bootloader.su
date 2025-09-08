@@ -1,0 +1,7 @@
+../Core/Src/Bootloader.c:15:10:BL_CalculateCRC	32	static
+../Core/Src/Bootloader.c:35:6:BL_UpdateFlags	24	static
+../Core/Src/Bootloader.c:46:6:BL_VerifyFirmware	40	static
+../Core/Src/Bootloader.c:61:6:BL_CheckForUpdateRequest	16	static
+../Core/Src/Bootloader.c:72:6:BL_JumpToApplication	32	static
+../Core/Src/Bootloader.c:84:6:BL_ReceiveAndFlashFirmware	288	static
+../Core/Src/Bootloader.c:116:6:BL_Run	8	static

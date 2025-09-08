@@ -39,7 +39,6 @@ void CANTP_Init(void);
 void CANTP_MainFunction(void);
 void CANTP_Transmit(uint32_t can_id, uint8_t *payload, uint16_t length);
 void CANTP_RxIndication(uint32_t can_id, uint8_t *data, uint8_t dlc);
-
-
+uint16_t CANTP_ReadRxData(uint8_t *buffer, uint16_t max_len);
 
 #endif /* INC_CANTP_H_ */

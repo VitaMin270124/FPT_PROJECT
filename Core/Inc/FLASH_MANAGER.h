@@ -32,7 +32,7 @@ bool FlashManager_GetPartitionInfo(FlashPartitionId_t partId, FlashPartitionInfo
 bool FlashManager_WritePartition(FlashPartitionId_t partId,
                                  uint32_t offset,
                                  const uint8_t *data,
-                                 uint32_t length)
+                                 uint32_t length);
 
 bool FlashManager_ReadPartition(FlashPartitionId_t partId, uint8_t *buffer, uint32_t length);
 

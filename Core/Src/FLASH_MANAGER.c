@@ -31,42 +31,34 @@ bool FlashManager_GetPartitionInfo(FlashPartitionId_t partId, FlashPartitionInfo
 /* ===========================================================
  * Write data into partition (halfword programming)
  * =========================================================== */
-bool FlashManager_WritePartition(FlashPartitionId_t partId, const uint8_t *data, uint32_t length)
+bool FlashManager_WritePartition(FlashPartitionId_t partId,
+                                 uint32_t offset,
+                                 const uint8_t *data,
+                                 uint32_t length)
 {
     if (partId >= PARTITION_MAX || data == NULL)
         return false;
 
     FlashPartitionInfo_t part = partitionTable[partId];
-    if (length > part.size)
+    if ((offset + length) > part.size)
         return false;
 
-    /* Erase partition before writting */
-    uint32_t addr = part.startAddress;
-    uint32_t endAddr = part.startAddress + part.size;
+    uint32_t writeAddr = part.startAddress + offset;
 
     FLASH_Unlock();
-    while (addr < endAddr) {
-        if (FLASH_ErasePage(addr) != 1) { // different 1 is fail
-            FLASH_Lock();
-            return false;
-        }
-        addr += part.pageSize;
-    }
 
-    /* Write data halfword at a time (16-bit) */
-    uint32_t writeAddr = part.startAddress;
     uint32_t i = 0;
     while (i < length) {
-        uint16_t halfword = 0xFFFF;
+        uint16_t halfword;
 
         if (i + 1 < length) {
             halfword = ((uint16_t)data[i+1] << 8) | data[i];
         } else {
-            /* if byte is odd, pad 0xFF */
+            /* nếu length lẻ thì pad 0xFF */
             halfword = (0xFF << 8) | data[i];
         }
 
-        if (FLASH_ProgramHalfWord(writeAddr, halfword) != 0) {
+        if (FLASH_ProgramHalfWord(writeAddr, halfword) != 1) {
             FLASH_Lock();
             return false;
         }
@@ -78,6 +70,7 @@ bool FlashManager_WritePartition(FlashPartitionId_t partId, const uint8_t *data,
     FLASH_Lock();
     return true;
 }
+
 
 /* ===========================================================
  * READ data from partition
@@ -122,7 +115,7 @@ bool FlashManager_ErasePartition(FlashPartitionId_t partId)
 
     FLASH_Unlock();
     while (addr < endAddr) {
-        if (FLASH_ErasePage(addr) != 0) {
+        if (FLASH_ErasePage(addr) != 1) {
             FLASH_Lock();
             return false;
         }

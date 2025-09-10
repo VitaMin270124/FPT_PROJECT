@@ -8,8 +8,6 @@
 
  #include <stdint.h>
 #include "cantp.h"
-
-#include "cantp.h"
 #include <string.h>
 
 static CANTP_Session_TypeDef tx_session;
@@ -17,8 +15,6 @@ static CANTP_Session_TypeDef rx_session;
 static uint8_t rx_buffer[4095];
 static uint16_t rx_buffer_len = 0;
 
-extern void CAN_Write(uint32_t id, uint8_t dlc, uint8_t *data);
-extern uint8_t CAN_Read(uint32_t *id, uint8_t *dlc, uint8_t *data);
 
 
 uint32_t HAL_GetTick(void) {
@@ -41,7 +37,7 @@ void CANTP_MainFunction(void) {
             uint8_t data_size = (tx_session.payload_length - tx_session.transmitted_length > 7) ? 7 : (tx_session.payload_length - tx_session.transmitted_length);
 
             memcpy(&cf_frame[1], tx_session.payload + tx_session.transmitted_length, data_size);
-            CAN_Write(tx_session.can_id, 8, cf_frame);
+            CAN_Transmit(tx_session.can_id, 8, cf_frame);
 
             tx_session.transmitted_length += data_size;
             tx_session.consecutive_frame_counter = (tx_session.consecutive_frame_counter % 0x0F) + 1;
@@ -60,7 +56,7 @@ void CANTP_MainFunction(void) {
     uint8_t rx_dlc;
     uint8_t rx_data[8];
 
-    if (CAN_Read(&rx_id, &rx_dlc, rx_data)) {
+    if (CAN_Receive(&rx_id, &rx_dlc, rx_data)) {
         CANTP_RxIndication(rx_id, rx_data, rx_dlc);
     }
 }
@@ -70,13 +66,13 @@ void CANTP_Transmit(uint32_t can_id, uint8_t *payload, uint16_t length) {
         uint8_t sf_frame[8];
         sf_frame[0] = (CANTP_FRAME_TYPE_SF | length);
         memcpy(&sf_frame[1], payload, length);
-        CAN_Write(can_id, length + 1, sf_frame);
+        CAN_Transmit(can_id, length + 1, sf_frame);
     } else {
         uint8_t ff_frame[8];
         ff_frame[0] = (CANTP_FRAME_TYPE_FF | (length >> 8));
         ff_frame[1] = (uint8_t)length;
         memcpy(&ff_frame[2], payload, 6);
-        CAN_Write(can_id, 8, ff_frame);
+        CAN_Transmit(can_id, 8, ff_frame);
 
         memcpy(tx_session.payload, payload, length);
         tx_session.can_id = can_id;
@@ -101,7 +97,7 @@ void CANTP_RxIndication(uint32_t can_id, uint8_t *data, uint8_t dlc) {
         rx_session.consecutive_frame_counter = 1;
 
         uint8_t fc_frame[8] = {CANTP_FRAME_TYPE_FC | CANTP_FC_FLOW_STATUS_CTS, 0x08, 0x00}; // BS=8, STmin=0
-        CAN_Write(can_id, 8, fc_frame);
+        CAN_Transmit(can_id, 8, fc_frame);
     } else if (frame_type == CANTP_FRAME_TYPE_CF) {
         uint8_t sn = data[0] & 0x0F;
         if (sn == rx_session.consecutive_frame_counter) {

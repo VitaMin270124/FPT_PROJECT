@@ -71,7 +71,7 @@ void BL_JumpToApplication(uint32_t app_address) {
 }
 
 void BL_Run(void) {
-    CAN_Init(CAN_MODE_LOOPBACK ,9600);
+    CAN_Init(CAN_MODE_LOOPBACK ,115200);
     CANTP_Init();
 
     // Đọc cờ trạng thái từ Flash
@@ -91,7 +91,7 @@ void BL_Run(void) {
     if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {
         if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
         	// Rollback_cpy .................
-
+        	while(!Rollback_ToMainApp())
             BL_JumpToApplication(PARTITION_APP_MAIN);
         } else if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
             // Cập nhật cờ

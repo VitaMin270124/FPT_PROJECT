@@ -3,4 +3,4 @@
 ../Core/Src/Bootloader.c:23:6:BL_VerifyFirmware	3
 ../Core/Src/Bootloader.c:37:6:BL_CheckForUpdateRequest	2
 ../Core/Src/Bootloader.c:51:6:BL_JumpToApplication	2
-../Core/Src/Bootloader.c:73:6:BL_Run	7
+../Core/Src/Bootloader.c:73:6:BL_Run	8

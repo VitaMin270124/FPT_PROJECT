@@ -17,6 +17,7 @@
 #include "UDS.h"
 #include "gpio.h"
 #include "can.h"
+#include "Rollback.h"
 
 typedef struct {
   volatile uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */

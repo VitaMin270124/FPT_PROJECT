@@ -2,6 +2,7 @@
 #define __CAN_H
 
 #include <stdint.h>
+#include "NVIC.h"
 
 typedef struct {
     volatile uint32_t MCR;

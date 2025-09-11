@@ -2,6 +2,7 @@
 "./Core/Src/Crc.o"
 "./Core/Src/FLASH_MANAGER.o"
 "./Core/Src/FLASH_module.o"
+"./Core/Src/NVIC.o"
 "./Core/Src/Rollback.o"
 "./Core/Src/UDS.o"
 "./Core/Src/can.o"

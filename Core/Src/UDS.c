@@ -30,7 +30,8 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen);
 static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen);
 
 // Global variables
-
+bool update_done = false;
+uint32_t receivedCRC = 0;
 
 // Global typedef
 FlashPartitionId_t update_partition;

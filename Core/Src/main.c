@@ -62,7 +62,7 @@
 int main(void)
 {
 
-  CLOCK_Init();
+	clock_init();
   BL_Run();
   while (1)
   {

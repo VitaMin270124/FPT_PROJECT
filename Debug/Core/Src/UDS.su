@@ -3,8 +3,8 @@
 ../Core/Src/UDS.c:63:13:UDS_HandleDiagnosticSessionControl	24	static
 ../Core/Src/UDS.c:100:13:UDS_HandleRequestDownload	24	static
 ../Core/Src/UDS.c:154:13:UDS_HandleTransferData	32	static
-../Core/Src/UDS.c:184:6:UDS_MainFunction	16	static
-../Core/Src/UDS.c:233:6:UDS_RxIndication	24	static
-../Core/Src/UDS.c:244:6:UDS_SendPositiveResponse	88	static
-../Core/Src/UDS.c:258:6:UDS_SendNegativeResponse	24	static
-../Core/Src/UDS.c:268:13:UDS_HandleTransferExit	16	static
+../Core/Src/UDS.c:186:6:UDS_MainFunction	16	static
+../Core/Src/UDS.c:235:6:UDS_RxIndication	24	static
+../Core/Src/UDS.c:246:6:UDS_SendPositiveResponse	88	static
+../Core/Src/UDS.c:260:6:UDS_SendNegativeResponse	24	static
+../Core/Src/UDS.c:270:13:UDS_HandleTransferExit	16	static

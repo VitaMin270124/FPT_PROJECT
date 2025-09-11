@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "NVIC.h"
+#include "gpio.h"
 
 typedef struct {
     volatile uint32_t MCR;

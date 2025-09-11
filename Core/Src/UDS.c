@@ -167,10 +167,12 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
         	UDS_SendNegativeResponse(reqData[0], 0x22); // CONDITIONS_NOT_CORRECT
         	return;
         }
+
+        CANTP_SendFlowControl(uds_request_id,CANTP_FC_FLOW_STATUS_WAIT,CANTP_FRAME_TYPE_FC,10);
         FlashManager_WritePartition(update_partition, download_address + bytes_received, data, dataLen);
         bytes_received += dataLen;
         block_counter++;
-
+        CANTP_SendFlowControl(uds_request_id,CANTP_FC_FLOW_STATUS_CTS,CANTP_FRAME_TYPE_FC,1);
         uint8_t resp[1] = {blockNum};
         UDS_SendPositiveResponse(reqData[0], resp, 1);
     } else {
@@ -232,7 +234,7 @@ void UDS_MainFunction(void)
 
 void UDS_RxIndication(uint32_t can_id, uint8_t *data, uint8_t dlc)
 {
-    if (can_id != uds_request_id) return;
+   // if (can_id != uds_request_id) return;
 
     // copy vào buffer tạm thời
     if (dlc > sizeof(uds_rx_buffer)) return;

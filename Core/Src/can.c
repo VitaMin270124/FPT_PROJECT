@@ -20,7 +20,15 @@ static void CAN_NVIC_Config(void)
 }
 
 void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler) {
-    RCC_APB1ENR |= RCC_APB1ENR_CAN1EN_M;
+
+	GPIO_Clock_Enable(GPIOB);
+	GPIOB->CRH &= ~(0xFUL << 0); // Xóa cấu hình hiện tại của PB8 (bits 0-3)
+	GPIOB->CRH |= (0x4UL << 0); // Cấu hình PB8 là Input floating (CNF = 01, MODE = 00)
+
+	GPIOB->CRH &= ~(0xFUL << 4); // Xóa cấu hình hiện tại của PB9 (bits 4-7)
+	GPIOB->CRH |= (0xBUL << 4);
+
+	RCC_APB1ENR |= RCC_APB1ENR_CAN1EN_M;
 
     CAN1->MCR |= (1UL << 0); // Đặt bit INRQ
     while (!((CAN1->MSR >> 0) & 1)); // Đợi INAK = 1 để xác nhận

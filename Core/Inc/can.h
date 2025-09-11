@@ -66,5 +66,7 @@ void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler);
 uint8_t CAN_Transmit(uint32_t id, uint8_t dlc, uint8_t *data);
 uint8_t CAN_Receive(uint32_t *id, uint8_t *dlc, uint8_t *data);
 void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState);
+void CAN_FilterInit(uint8_t filterBank, uint32_t id, uint32_t mask, uint8_t fifoAssign);
+
 
 #endif // __CAN_H

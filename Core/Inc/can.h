@@ -28,6 +28,11 @@ typedef struct {
     volatile uint32_t RDH;
 } CAN_RxMailbox_TypeDef;
 
+typedef enum {
+	DISABLE = 0x00,
+	ENABLE = 0x01
+} FunctionalState;
+
 #define CAN1_BASE             (0x40006400UL)
 #define CAN1                  ((CAN_TypeDef *) CAN1_BASE)
 #define CAN1_TX_MAILBOX_0     ((CAN_TxMailbox_TypeDef *) (CAN1_BASE + 0x180UL))
@@ -38,8 +43,11 @@ typedef struct {
 #define CAN_MODE_LOOPBACK     0x02
 #define CAN_MODE_LOOPBACK_SILENT 0x03
 
+#define CAN_IER_FMPIE0   ((uint32_t)0x00000002)  // bit interupt FIFO0
+
 void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler);
 uint8_t CAN_Transmit(uint32_t id, uint8_t dlc, uint8_t *data);
 uint8_t CAN_Receive(uint32_t *id, uint8_t *dlc, uint8_t *data);
+void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState);
 
 #endif // __CAN_H

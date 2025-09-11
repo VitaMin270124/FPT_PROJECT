@@ -1,4 +1,3 @@
-
 #include "Clock.h"
 
 /* Function to initialize the system clock */

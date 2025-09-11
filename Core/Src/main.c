@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "Bootloader.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -93,7 +94,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  BL_Run();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

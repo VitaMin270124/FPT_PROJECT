@@ -39,7 +39,15 @@ void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler) {
 
     CAN1->MCR &= ~(1UL << 0); // Xóa bit INRQ
     while ((CAN1->MSR >> 0) & 1); // Đợi INAK = 0 để xác nhận
+
+    // Nhận tất cả ID → filter 0 vào FIFO0
+    CAN_FilterInit(0, 0x000, 0x000, 0);
+
+    // Nhận đúng ID 0x123 → filter 1 vào FIFO0
+    //CAN_FilterInit(1, 0x123, 0x7FF, 0);
+
     CAN_NVIC_Config();
+
 }
 
 uint8_t CAN_Transmit(uint32_t id, uint8_t dlc, uint8_t *data) {
@@ -77,6 +85,40 @@ void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState)
         CANx->IER &= ~CAN_IT;
     }
 }
+
+void CAN_FilterInit(uint8_t filterBank, uint32_t id, uint32_t mask, uint8_t fifoAssign)
+{
+    // Bật chế độ khởi tạo filter
+    CAN_FILTER->FMR |= CAN_FMR_FINIT;
+
+    // Chọn scale 32-bit cho filterBank
+    CAN_FILTER->FS1R |= (1U << filterBank);
+
+    // Chọn chế độ mask (ID & Mask)
+    CAN_FILTER->FM1R &= ~(1U << filterBank);
+
+    // Gán vào FIFO0 hoặc FIFO1
+    if (fifoAssign == 0) {
+        CAN_FILTER->FFA1R &= ~(1U << filterBank);  // FIFO0
+    } else {
+        CAN_FILTER->FFA1R |= (1U << filterBank);   // FIFO1
+    }
+
+    // Chuẩn 11-bit ID → dịch vào vị trí StdId (bit 21..31)
+    uint32_t id_reg   = (id & 0x7FF) << 21;
+    uint32_t mask_reg = (mask & 0x7FF) << 21;
+
+    CAN_FILTER->sFilterRegister[filterBank].FR1 = id_reg;
+    CAN_FILTER->sFilterRegister[filterBank].FR2 = mask_reg;
+
+    // Bật filter
+    CAN_FILTER->FA1R |= (1U << filterBank);
+
+    // Thoát chế độ khởi tạo
+    CAN_FILTER->FMR &= ~CAN_FMR_FINIT;
+}
+
+
 
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {

@@ -28,26 +28,45 @@ typedef struct {
     volatile uint32_t RDH;
 } CAN_RxMailbox_TypeDef;
 
+typedef struct {
+    volatile uint32_t FMR;   // filter master register
+    volatile uint32_t FM1R;  // filter mode register
+    volatile uint32_t FS1R;  // filter scale register
+    volatile uint32_t FFA1R; // filter FIFO assignment register
+    volatile uint32_t FA1R;  // filter activation register
+} CAN_FilterRegister_TypeDef;
+
 typedef enum {
 	DISABLE = 0x00,
 	ENABLE = 0x01
 } FunctionalState;
 
+// === Base addresses ===
 #define CAN1_BASE             (0x40006400UL)
 #define CAN1                  ((CAN_TypeDef *) CAN1_BASE)
+
 #define CAN1_TX_MAILBOX_0     ((CAN_TxMailbox_TypeDef *) (CAN1_BASE + 0x180UL))
 #define CAN1_RX_MAILBOX_0     ((CAN_RxMailbox_TypeDef *) (CAN1_BASE + 0x1B0UL))
 #define CAN1_RX_MAILBOX_1     ((CAN_RxMailbox_TypeDef *) (CAN1_BASE + 0x1C0UL))
+
+// === CAN modes ===
 #define CAN_MODE_NORMAL       0x00
 #define CAN_MODE_SILENT       0x01
 #define CAN_MODE_LOOPBACK     0x02
 #define CAN_MODE_LOOPBACK_SILENT 0x03
 
+// === Interrupt bits ===
 #define CAN_IER_FMPIE0   ((uint32_t)0x00000002)  // bit interupt FIFO0
+
+// Filter registers base (the filter banks are shared between CAN1/CAN2)
+#define CAN_FILTER_BASE       (0x40006600UL)
+#define CAN_FILTER            ((CAN_FilterRegister_TypeDef *) CAN_FILTER_BASE)
 
 void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler);
 uint8_t CAN_Transmit(uint32_t id, uint8_t dlc, uint8_t *data);
 uint8_t CAN_Receive(uint32_t *id, uint8_t *dlc, uint8_t *data);
 void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState);
+void CAN_FilterInit(uint8_t filterBank, uint32_t id, uint32_t mask, uint8_t fifoAssign);
+
 
 #endif // __CAN_H

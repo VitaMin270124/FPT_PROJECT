@@ -22,7 +22,7 @@ void CRC_Reset(void);
  * @param[in] length Number of 32-bit words in the data buffer
  * @return CRC32 value
  */
-uint32_t CRC_Calculate(const uint32_t *data, size_t length);
+uint32_t CRC_Calculate(const void *data, size_t length);
 
 
 #endif 

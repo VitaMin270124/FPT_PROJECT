@@ -1,0 +1,10 @@
+../Core/Src/UDS.c:41:6:UDS_Init	4	static
+../Core/Src/UDS.c:57:17:UDS_GetCurrentSession	4	static
+../Core/Src/UDS.c:62:13:UDS_HandleDiagnosticSessionControl	24	static
+../Core/Src/UDS.c:99:13:UDS_HandleRequestDownload	24	static
+../Core/Src/UDS.c:153:13:UDS_HandleTransferData	32	static
+../Core/Src/UDS.c:183:6:UDS_MainFunction	16	static
+../Core/Src/UDS.c:232:6:UDS_RxIndication	24	static
+../Core/Src/UDS.c:243:6:UDS_SendPositiveResponse	88	static
+../Core/Src/UDS.c:257:6:UDS_SendNegativeResponse	24	static
+../Core/Src/UDS.c:267:13:UDS_HandleTransferExit	16	static

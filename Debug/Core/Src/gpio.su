@@ -3,3 +3,4 @@
 ../Core/Src/gpio.c:40:6:GPIO_Pin_Set	16	static
 ../Core/Src/gpio.c:44:6:GPIO_Pin_Reset	16	static
 ../Core/Src/gpio.c:48:6:GPIO_Pin_Toggle	16	static
+../Core/Src/gpio.c:56:15:GPIO_ReadPin	16	static

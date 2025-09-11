@@ -11,7 +11,7 @@ void CRC_Init(void) {
 }
 
 void CRC_Reset(void) {
-    CRC->CR = 1u;
+    CRC_M->CR = 1u;
 }
 
 uint32_t CRC_Calculate(const void *data, size_t length) {
@@ -23,15 +23,15 @@ uint32_t CRC_Calculate(const void *data, size_t length) {
 
     uint32_t word_count = length / 4;
     for (uint32_t i = 0; i < word_count; i++) {
-        CRC->DR = ((const uint32_t *)byte_ptr)[i];
+        CRC_M->DR = ((const uint32_t *)byte_ptr)[i];
     }
 
     uint32_t remainder_bytes = length % 4;
     if (remainder_bytes > 0) {
         uint32_t last_word = 0;
         memcpy(&last_word, byte_ptr + (word_count * 4), remainder_bytes);
-        CRC->DR = last_word;
+        CRC_M->DR = last_word;
     }
 
-    return CRC->DR;
+    return CRC_M->DR;
 }

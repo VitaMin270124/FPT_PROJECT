@@ -1,4 +1,4 @@
 ../Core/Src/FLASH_MANAGER.c:22:6:FlashManager_GetPartitionInfo	3
-../Core/Src/FLASH_MANAGER.c:34:6:FlashManager_WritePartition	9
-../Core/Src/FLASH_MANAGER.c:85:6:FlashManager_ReadPartition	6
-../Core/Src/FLASH_MANAGER.c:114:6:FlashManager_ErasePartition	4
+../Core/Src/FLASH_MANAGER.c:34:6:FlashManager_WritePartition	7
+../Core/Src/FLASH_MANAGER.c:78:6:FlashManager_ReadPartition	6
+../Core/Src/FLASH_MANAGER.c:107:6:FlashManager_ErasePartition	4

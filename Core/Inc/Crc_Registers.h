@@ -16,7 +16,7 @@ typedef struct
 #define CRC_BASE_ADDRESS ((CRC_typedef *)0x40023000u)
 
 /** CRC Pointer */
-#define CRC ((CRC_typedef *)CRC_BASE_ADDRESS)
+#define CRC_M ((CRC_typedef *) CRC_BASE_ADDRESS)
 
 
 #endif

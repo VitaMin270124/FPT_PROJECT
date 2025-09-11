@@ -39,5 +39,5 @@ void GPIO_Pin_Configure(GPIO_TypeDef* GPIOx, uint8_t pin, uint8_t mode, uint8_t 
 void GPIO_Pin_Set(GPIO_TypeDef* GPIOx, uint8_t pin);
 void GPIO_Pin_Reset(GPIO_TypeDef* GPIOx, uint8_t pin);
 void GPIO_Pin_Toggle(GPIO_TypeDef* GPIOx, uint8_t pin);
-
+unsigned char GPIO_ReadPin(GPIO_TypeDef *pGPIOx, unsigned char PinNumber);
 #endif // __GPIO_H

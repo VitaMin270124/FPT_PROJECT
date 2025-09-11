@@ -4,7 +4,7 @@
  *  Created on: Sep 9, 2025
  *      Author: Minh
  */
-#include "uds.h"
+#include "UDS.h"
 #include <string.h>
 
 // Static variables
@@ -30,8 +30,7 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen);
 static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen);
 
 // Global variables
-uint8_t update_done;
-uint32_t receivedCRC;
+
 
 // Global typedef
 FlashPartitionId_t update_partition;
@@ -108,7 +107,7 @@ static void UDS_HandleRequestDownload(uint8_t *reqData, uint16_t reqLen)
 
         // Kiểm tra đủ dữ liệu trong request
         if (reqLen < (3 + addrLen + sizeLen)) {
-               UDS_SendNegativeResponse(sid, 0x13);
+               UDS_SendNegativeResponse(uds_rx_buffer[0], 0x13);
                return;
         }
 
@@ -125,7 +124,7 @@ static void UDS_HandleRequestDownload(uint8_t *reqData, uint16_t reqLen)
         }
 
         if(download_size > 24*1024) {
-        	UDS_SendNegativeResponse(sid, 0x13); // Incorrect Length
+        	UDS_SendNegativeResponse(reqData[0], 0x13); // Incorrect Length
         	return;
         }
 
@@ -137,16 +136,16 @@ static void UDS_HandleRequestDownload(uint8_t *reqData, uint16_t reqLen)
         else if(0x08010000 <= download_address < 0x0801C000)
         	update_partition = PARTITION_APP_BACKUP;
         else {
-        	UDS_SendNegativeResponse(sid, 0x31); // REQUEST_OUT_OF_RANGE (ngoài vùng bộ nhớ được ghi)
+        	UDS_SendNegativeResponse(reqData[0], 0x31); // REQUEST_OUT_OF_RANGE (ngoài vùng bộ nhớ được ghi)
         	return;
         }
 
-        FlashManager_ErasePartition(update_partitrion);
+        FlashManager_ErasePartition(update_partition);
 
         uint8_t resp[2] = {0x02, 0x00}; // MaxBlockLength=0x0200 = 512 bytes
-        UDS_SendPositiveResponse(sid, resp, 2);
+        UDS_SendPositiveResponse(reqData[0], resp, 2);
     } else {
-        UDS_SendNegativeResponse(sid, 0x13); // Incorrect Length
+        UDS_SendNegativeResponse(reqData[0], 0x13); // Incorrect Length
     }
     return;
 }
@@ -156,7 +155,7 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
     if (reqLen > 2) {
         uint8_t blockNum = reqData[1];
         if (blockNum != block_counter) {
-            UDS_SendNegativeResponse(sid, 0x73); // Wrong Block Sequence Counter
+            UDS_SendNegativeResponse(reqData[0], 0x33); // Wrong Block Sequence Counter
             return;
         }
 
@@ -164,7 +163,7 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
         uint16_t dataLen = reqLen - 2;
 
         if(uds_active_session != UDS_SESSION_PROGRAMMING) {
-        	UDS_SendNegativeResponse(sid, 0x22); // CONDITIONS_NOT_CORRECT
+        	UDS_SendNegativeResponse(reqData[0], 0x22); // CONDITIONS_NOT_CORRECT
         	return;
         }
         FlashManager_WritePartition(update_partition, download_address + bytes_received, data, dataLen);
@@ -172,26 +171,13 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
         block_counter++;
 
         uint8_t resp[1] = {blockNum};
-        UDS_SendPositiveResponse(sid, resp, 1);
+        UDS_SendPositiveResponse(reqData[0], resp, 1);
     } else {
-        UDS_SendNegativeResponse(sid, 0x13);
+        UDS_SendNegativeResponse(reqData[0], 0x13);
     }
     return;
 }
 
-static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen)
-{
-	update_done = 1;
-	receivedCRC = (reqData[1] << 24) | (reqData[2] << 16) |
-	                           (reqData[3] << 8) | (reqData[4]);
-
-    if (bytes_received == download_size ) {
-        UDS_SendPositiveResponse(sid, NULL, 0);
-    } else {
-        UDS_SendNegativeResponse(sid, 0x72); // General programming failure
-    }
-    return;
-}
 
 
 void UDS_MainFunction(void)
@@ -277,3 +263,18 @@ void UDS_SendNegativeResponse(uint8_t sid, uint8_t nrc)
 
     CANTP_Transmit(uds_response_id, buffer, 3);
 }
+
+static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen)
+{
+	update_done = 1;
+	receivedCRC = (reqData[1] << 24) | (reqData[2] << 16) |
+	                           (reqData[3] << 8) | (reqData[4]);
+
+    if (bytes_received == download_size ) {
+        UDS_SendPositiveResponse(reqData[0], NULL, 0);
+    } else {
+        UDS_SendNegativeResponse(reqData[0], 0x72); // General programming failure
+    }
+    return;
+}
+

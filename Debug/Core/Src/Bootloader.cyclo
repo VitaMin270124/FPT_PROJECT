@@ -1,7 +1,6 @@
-../Core/Src/Bootloader.c:15:10:BL_CalculateCRC	4
-../Core/Src/Bootloader.c:35:6:BL_UpdateFlags	2
-../Core/Src/Bootloader.c:46:6:BL_VerifyFirmware	4
-../Core/Src/Bootloader.c:61:6:BL_CheckForUpdateRequest	1
-../Core/Src/Bootloader.c:72:6:BL_JumpToApplication	2
-../Core/Src/Bootloader.c:84:6:BL_ReceiveAndFlashFirmware	4
-../Core/Src/Bootloader.c:116:6:BL_Run	8
+../Core/Src/Bootloader.c:7:10:BL_CalculateCRC	1
+../Core/Src/Bootloader.c:12:6:BL_UpdateFlags	2
+../Core/Src/Bootloader.c:23:6:BL_VerifyFirmware	3
+../Core/Src/Bootloader.c:37:6:BL_CheckForUpdateRequest	2
+../Core/Src/Bootloader.c:51:6:BL_JumpToApplication	2
+../Core/Src/Bootloader.c:73:6:BL_Run	7

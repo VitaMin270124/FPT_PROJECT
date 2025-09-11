@@ -1,3 +1,6 @@
+#include "Bootloader.h"
+
+
 static Bootflag_t current_flags;
 static uint32_t firmware_received_count = 0;
 
@@ -12,7 +15,7 @@ bool BL_UpdateFlags(const Bootflag_t *flags) {
         FLASH_Lock();
         return false;
     }
-    bool result = FlashManager_WritePartition(PARTITION_DATA_FLAGS, (const uint8_t*)flags, sizeof(Bootflag_t));
+    bool result = FlashManager_WritePartition(PARTITION_DATA_FLAGS,0,(const uint8_t*)flags, sizeof(Bootflag_t));
     FLASH_Lock();
     return result;
 }
@@ -33,11 +36,13 @@ bool BL_VerifyFirmware(FlashPartitionId_t partId) {
 
 bool BL_CheckForUpdateRequest(void) {
 
-	if(GPIO_ReadPin(BOOT_PIN) == PIN_SET)
+	GPIO_Clock_Enable(GPIOA);
+	GPIO_Pin_Configure(GPIOA,10,GPIO_MODE_INPUT,GPIO_CNF_AFP_PP );
+	if(GPIO_ReadPin(GPIOA,10) == 0)
 	    return true;  // Nhấn nút → bootloader nhận firmware
 
     if (current_flags.update_firmware == UPDATE_REQUEST) {
-    	current_flags.update_firmwar = 0; // Xóa cờ sau khi đã đọc
+    	current_flags.update_firmware = 0; // Xóa cờ sau khi đã đọc
         return true;
     }
     	return false;
@@ -66,7 +71,7 @@ void BL_JumpToApplication(uint32_t app_address) {
 }
 
 void BL_Run(void) {
-    CAN_Init(CAN_MODE_LOOPBACK,9600);
+    CAN_Init(CAN_MODE_LOOPBACK ,9600);
     CANTP_Init();
 
     // Đọc cờ trạng thái từ Flash

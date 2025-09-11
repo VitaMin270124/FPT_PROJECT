@@ -1,3 +1,7 @@
-../Core/Src/can.c:9:6:CAN_Init	16	static
-../Core/Src/can.c:31:9:CAN_Transmit	24	static
-../Core/Src/can.c:43:9:CAN_Receive	24	static
+../Core/Src/can.c:13:13:CAN_NVIC_Config	8	static
+../Core/Src/can.c:22:6:CAN_Init	16	static
+../Core/Src/can.c:53:9:CAN_Transmit	24	static
+../Core/Src/can.c:65:9:CAN_Receive	24	static
+../Core/Src/can.c:78:6:CAN_ITConfig	24	static
+../Core/Src/can.c:89:6:CAN_FilterInit	32	static
+../Core/Src/can.c:123:6:USB_LP_CAN1_RX0_IRQHandler	24	static

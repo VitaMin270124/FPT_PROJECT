@@ -38,6 +38,9 @@ typedef enum {
     UDS_SESSION_EXTENDED    = 0x03
 } UDS_SessionType;
 
+extern bool update_done;
+extern uint32_t receivedCRC;
+
 // API prototypes
 void UDS_Init();
 UDS_SessionType UDS_GetCurrentSession(void);   // ------------ NEW  --------------- //

@@ -53,3 +53,7 @@ void GPIO_Pin_Toggle(GPIO_TypeDef* GPIOx, uint8_t pin) {
         GPIO_Pin_Set(GPIOx, pin);
     }
 }
+unsigned char GPIO_ReadPin(GPIO_TypeDef *pGPIOx, unsigned char PinNumber)
+{
+	return (unsigned char) ((pGPIOx->IDR >> PinNumber) & 1U);
+}

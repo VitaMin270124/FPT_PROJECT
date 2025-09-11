@@ -4,7 +4,7 @@
  *  Created on: Sep 9, 2025
  *      Author: Minh
  */
-#include "uds.h"
+#include "UDS.h"
 #include <string.h>
 
 // Static variables
@@ -156,7 +156,7 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
     if (reqLen > 2) {
         uint8_t blockNum = reqData[1];
         if (blockNum != block_counter) {
-            UDS_SendNegativeResponse(sid, 0x73); // Wrong Block Sequence Counter
+            UDS_SendNegativeResponse(sid, 0x33); // Wrong Block Sequence Counter
             return;
         }
 

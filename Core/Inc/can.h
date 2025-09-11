@@ -29,12 +29,22 @@ typedef struct {
 } CAN_RxMailbox_TypeDef;
 
 typedef struct {
-    volatile uint32_t FMR;   // filter master register
-    volatile uint32_t FM1R;  // filter mode register
-    volatile uint32_t FS1R;  // filter scale register
-    volatile uint32_t FFA1R; // filter FIFO assignment register
-    volatile uint32_t FA1R;  // filter activation register
+    volatile uint32_t FR1;
+    volatile uint32_t FR2;
 } CAN_FilterRegister_TypeDef;
+
+typedef struct {
+    volatile uint32_t FMR;   /*!< CAN filter master register          */
+    volatile uint32_t FM1R;  /*!< Filter mode register                */
+    uint32_t RESERVED0;
+    volatile uint32_t FS1R;  /*!< Filter scale register               */
+    uint32_t RESERVED1;
+    volatile uint32_t FFA1R; /*!< Filter FIFO assignment register     */
+    uint32_t RESERVED2;
+    volatile uint32_t FA1R;  /*!< Filter activation register          */
+    uint32_t RESERVED3[8];
+    CAN_FilterRegister_TypeDef sFilterRegister[14]; /*!< 14 filter banks */
+} CAN_Filter_TypeDef;
 
 typedef enum {
 	DISABLE = 0x00,
@@ -60,12 +70,19 @@ typedef enum {
 
 // Filter registers base (the filter banks are shared between CAN1/CAN2)
 #define CAN_FILTER_BASE       (0x40006600UL)
-#define CAN_FILTER            ((CAN_FilterRegister_TypeDef *) CAN_FILTER_BASE)
+#define CAN_FILTER            ((CAN_Filter_TypeDef *) CAN_FILTER_BASE)
 
 void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler);
 uint8_t CAN_Transmit(uint32_t id, uint8_t dlc, uint8_t *data);
 uint8_t CAN_Receive(uint32_t *id, uint8_t *dlc, uint8_t *data);
 void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState);
+
+/*
+filterBank: số thứ tự filter (0..13 với STM32F103).
+id: ID muốn lọc (chuẩn 11-bit).
+mask: mask để quyết định bit nào cần so sánh (0 = don’t care, 1 = phải khớp).
+fifoAssign: chọn đưa vào FIFO0 (0) hay FIFO1 (1).
+*/
 void CAN_FilterInit(uint8_t filterBank, uint32_t id, uint32_t mask, uint8_t fifoAssign);
 
 

@@ -1,0 +1,6 @@
+../Core/Src/cantp.c:24:10:HAL_GetTick	4	static
+../Core/Src/cantp.c:29:6:CANTP_Init	8	static
+../Core/Src/cantp.c:35:6:CANTP_MainFunction	40	static
+../Core/Src/cantp.c:68:6:CANTP_Transmit	40	static
+../Core/Src/cantp.c:90:6:CANTP_RxIndication	40	static
+../Core/Src/cantp.c:131:10:CANTP_ReadRxData	24	static

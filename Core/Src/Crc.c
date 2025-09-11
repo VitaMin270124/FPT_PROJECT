@@ -14,15 +14,25 @@ void CRC_Reset(void) {
     CRC->CR = 1u;
 }
 
-uint32_t CRC_Calculate(const uint32_t *data, size_t length) {
-    /* Reset CRC before new calculation */
-    CRC_Reset();
+uint32_t CRC_Calculate(const void *data, size_t length) {
+    if (length == 0) return 0;
 
-    for( size_t i = 0; i < length; i++) 
-    {
-        CRC->DR = data[i];
+    CRC_Init();
+
+    const uint8_t *byte_ptr = (const uint8_t *)data;
+
+    uint32_t word_count = length / 4;
+    for (uint32_t i = 0; i < word_count; i++) {
+        CRC->DR = ((const uint32_t *)byte_ptr)[i];
     }
 
-    /* Return the computed CRC value */
+    uint32_t remainder_bytes = length % 4;
+    if (remainder_bytes > 0) {
+        uint32_t last_word = 0;
+        memcpy(&last_word, byte_ptr + (word_count * 4), remainder_bytes);
+        CRC->DR = last_word;
+    }
+
     return CRC->DR;
 }
+

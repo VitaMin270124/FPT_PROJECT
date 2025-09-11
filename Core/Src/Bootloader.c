@@ -85,6 +85,7 @@ void BL_Run(void) {
     	}
     }
 
+
     // Check CRC -> Jump app ....
     if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {
         if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {

@@ -79,51 +79,31 @@ void BL_Run(void) {
     // Nếu có update vào UDS nhận và ghi vào flash theo sequence requestdownload -> transferdata -> transferexit
     if (BL_CheckForUpdateRequest()) {
     	UDS_Init();
+    	current_flags.boot_flag = FLAG_MAIN_APP_VALID;
     	while(!update_done) {
     		UDS_MainFunction();
     	}
-    	// Check CRC ....
-    	if(BL_VerifyFirmware(update_patition)) {
-    		 UDS_SendPositiveResponse(sid, NULL, 0);
-    		 if(update_partition == PARTITION_APP_MAIN)
-    			 current_flags.boot_flag = FLAG_MAIN_APP_VALID;
-    		 else if(update_partition == PARTITION_APP_BACKUP)
-    			 boot_flag = FLAG_BACKUP_APP_VALID;
-    	} else {
-    		 UDS_SendPositiveResponse(sid, NULL, 0);
-    		 current_flags.boot_flag = FLAG_NO_VALID_APP;
-    	}
     }
 
-    // Jump app ....
+    // Check CRC -> Jump app ....
     if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {
-    	BL_UpdateFlags(&current_flags);
-    	BL_JumpToApplication(PARTITION_APP_MAIN);
+        if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
+            BL_JumpToApplication(PARTITION_APP_MAIN);
+        } else if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
+            // Cập nhật cờ
+            current_flags.boot_flag = FLAG_BACKUP_APP_VALID;
+            BL_UpdateFlags(&current_flags);
+            BL_JumpToApplication(PARTITION_APP_BACKUP);
+        }
     } else if (current_flags.boot_flag == FLAG_BACKUP_APP_VALID) {
-    	BL_UpdateFlags(&current_flags);
-    	BL_JumpToApplication(PARTITION_APP_BACKUP);
+        if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
+            BL_JumpToApplication(PARTITION_APP_BACKUP);
+        } else if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
+            // Cập nhật cờ
+            current_flags.boot_flag = FLAG_MAIN_APP_VALID;
+            BL_UpdateFlags(&current_flags);
+            BL_JumpToApplication(PARTITION_APP_MAIN);
+        }
     }
-
-
-
-//    if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {
-//        if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
-//            BL_JumpToApplication(PARTITION_APP_MAIN);
-//        } else if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
-//            BL_JumpToApplication(PARTITION_APP_BACKUP);
-//            // Cập nhật cờ
-//            current_flags.boot_flag = FLAG_BACKUP_APP_VALID;
-//            BL_UpdateFlags(&current_flags);
-//        }
-//    } else if (current_flags.boot_flag == FLAG_BACKUP_APP_VALID) {
-//        if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
-//            BL_JumpToApplication(PARTITION_APP_BACKUP);
-//        } else if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
-//            BL_JumpToApplication(PARTITION_APP_MAIN);
-//            // Cập nhật cờ
-//            current_flags.boot_flag = FLAG_MAIN_APP_VALID;
-//            BL_UpdateFlags(&current_flags);
-//        }
-//    }
     while(1);
 }

@@ -185,9 +185,9 @@ static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen)
 	receivedCRC = (reqData[1] << 24) | (reqData[2] << 16) |
 	                           (reqData[3] << 8) | (reqData[4]);
 
-	// SendPositve and SenNegative được gửi từ BL_run()
-
-    if (bytes_received != download_size ) {
+    if (bytes_received == download_size ) {
+        UDS_SendPositiveResponse(sid, NULL, 0);
+    } else {
         UDS_SendNegativeResponse(sid, 0x72); // General programming failure
     }
     return;

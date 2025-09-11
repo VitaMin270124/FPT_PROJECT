@@ -73,7 +73,7 @@ void BL_JumpToApplication(uint32_t app_address) {
 void BL_Run(void) {
     CAN_Init(CAN_MODE_LOOPBACK ,115200);
     CANTP_Init();
-
+    CAN_ITConfig(CAN1, CAN_IER_FMPIE0, ENABLE);
     // Đọc cờ trạng thái từ Flash
     FlashManager_ReadPartition(PARTITION_DATA_FLAGS, (uint8_t*)&current_flags, sizeof(Bootflag_t));
 

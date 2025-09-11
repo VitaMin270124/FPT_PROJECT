@@ -1,6 +1,3 @@
-
-
-
 static Bootflag_t current_flags;
 static uint32_t firmware_received_count = 0;
 
@@ -88,6 +85,8 @@ void BL_Run(void) {
     // Check CRC -> Jump app ....
     if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {
         if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
+        	// Rollback_cpy .................
+
             BL_JumpToApplication(PARTITION_APP_MAIN);
         } else if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
             // Cập nhật cờ
@@ -96,14 +95,8 @@ void BL_Run(void) {
             BL_JumpToApplication(PARTITION_APP_BACKUP);
         }
     } else if (current_flags.boot_flag == FLAG_BACKUP_APP_VALID) {
-        if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
             BL_JumpToApplication(PARTITION_APP_BACKUP);
-        } else if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
-            // Cập nhật cờ
-            current_flags.boot_flag = FLAG_MAIN_APP_VALID;
-            BL_UpdateFlags(&current_flags);
-            BL_JumpToApplication(PARTITION_APP_MAIN);
-        }
+
     }
     while(1);
 }

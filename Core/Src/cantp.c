@@ -8,8 +8,6 @@
 
 #include <stdint.h>
 #include "cantp.h"
-
-#include "cantp.h"
 #include <string.h>
 
 static CANTP_Session_TypeDef tx_session;

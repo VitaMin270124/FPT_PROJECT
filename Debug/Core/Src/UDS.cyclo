@@ -4,7 +4,7 @@
 ../Core/Src/UDS.c:100:13:UDS_HandleRequestDownload	6
 ../Core/Src/UDS.c:154:13:UDS_HandleTransferData	4
 ../Core/Src/UDS.c:186:6:UDS_MainFunction	8
-../Core/Src/UDS.c:235:6:UDS_RxIndication	2
+../Core/Src/UDS.c:235:6:UDS_RxIndication	1
 ../Core/Src/UDS.c:246:6:UDS_SendPositiveResponse	3
 ../Core/Src/UDS.c:260:6:UDS_SendNegativeResponse	1
 ../Core/Src/UDS.c:270:13:UDS_HandleTransferExit	2

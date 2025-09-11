@@ -31,6 +31,7 @@ static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen);
 
 // Global variables
 uint8_t update_done;
+uint32_t receivedCRC;
 
 // Global typedef
 FlashPartitionId_t update_partition;
@@ -42,6 +43,7 @@ void UDS_Init()
 {
 	uds_active_session = UDS_SESSION_DEFAULT;   // <-- Init to Default Session
 	update_done = 0;
+	receivedCRC = 0;
     uds_request_id = 0x7E0;
     uds_response_id = 0x7E8;
     uds_rx_length = 0;
@@ -179,9 +181,13 @@ static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
 
 static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen)
 {
-    if (bytes_received == download_size) {
-        UDS_SendPositiveResponse(sid, NULL, 0);
-    } else {
+	update_done = 1;
+	receivedCRC = (reqData[1] << 24) | (reqData[2] << 16) |
+	                           (reqData[3] << 8) | (reqData[4]);
+
+	// SendPositve and SenNegative được gửi từ BL_run()
+
+    if (bytes_received != download_size ) {
         UDS_SendNegativeResponse(sid, 0x72); // General programming failure
     }
     return;
@@ -228,7 +234,6 @@ void UDS_MainFunction(void)
 
         case UDS_SID_REQUEST_TRANSFER_EXIT:
         	UDS_HandleTransferExit(uds_rx_buffer, uds_rx_length);
-        	update_done = 1;
             break;
 
         default:

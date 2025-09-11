@@ -15,10 +15,10 @@
 #define UPDATE_REQUEST 0xDEADBEEFU
 
 typedef struct{
-	uint8_t update_firmware;
-	uint8_t boot_flag;
-	uint8_t main_flag;
-	uint8_t rb_flag;
+	uint8_t update_firmware;  // Báo chuẩn bị update
+	uint8_t boot_flag;  //  Báo xem nhảy tới đâu
+	uint8_t main_flag;	//  Báo main đã có data chưa
+	uint32_t CRC;		// CRC tổng
 }Bootflag_t ;
 
 

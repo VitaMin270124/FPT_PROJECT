@@ -5,23 +5,8 @@ static Bootflag_t current_flags;
 static uint32_t firmware_received_count = 0;
 
 uint32_t BL_CalculateCRC(uint32_t start_address, uint32_t length) {
-    if (length == 0) return 0; // Tránh chia cho 0 nếu độ dài là 0
-
-    CRC_Init();
-
-    uint32_t *data_ptr = (uint32_t *)start_address;
-    for (uint32_t i = 0; i < length / 4; i++) {
-        CRC->DR = *data_ptr;
-        data_ptr++;
-    }
-    uint32_t remainder_bytes = length % 4;
-    if (remainder_bytes > 0) {
-        uint32_t last_word = 0;
-        memcpy(&last_word, data_ptr, remainder_bytes);
-        CRC->DR = last_word;
-    }
-
-    return CRC->DR;
+    // Bootloader chỉ wrap lại cho tiện dụng
+    return CRC_Calculate((const void *)start_address, length);
 }
 
 bool BL_UpdateFlags(const Bootflag_t *flags) {

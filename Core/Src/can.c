@@ -78,13 +78,12 @@ void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState)
     }
 }
 
-void USB_HP_CAN1_TX_IRQHandler(void)
+void USB_LP_CAN1_RX0_IRQHandler(void)
 {
     uint32_t id;
     uint8_t dlc;
     uint8_t data[8];
 
-	CAN_Receive(&id, &dlc, data);
-
-	CANTP_RxIndication(id, data, dlc);
+    if(CAN_Receive(&id, &dlc, data))
+    	CANTP_RxIndication(id, data, dlc);
 }

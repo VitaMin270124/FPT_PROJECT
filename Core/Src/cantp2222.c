@@ -37,13 +37,13 @@ void CANTP_Transmit(uint32_t can_id, uint8_t *payload, uint16_t length) {
     if (length <= 7) {
         // Single Frame
         uint8_t sf[8] = {0};
-        sf[0] = (CANTP_FRAME_TYPE_SF | length);
+        sf[0] = ((CANTP_FRAME_TYPE_SF << 4) | (length & 0x0F));
         memcpy(&sf[1], payload, length);
         CAN_Write(can_id, length + 1, sf);
     } else {
         // First Frame
         uint8_t ff[8] = {0};
-        ff[0] = (CANTP_FRAME_TYPE_FF | (length >> 8));
+        ff[0] = ((CANTP_FRAME_TYPE_FF << 4) | ((length >> 8) & 0x0F));
         ff[1] = (uint8_t)length;
         memcpy(&ff[2], payload, 6);
         CAN_Write(can_id, 8, ff);

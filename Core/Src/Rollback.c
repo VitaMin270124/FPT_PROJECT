@@ -1,30 +1,42 @@
 #include "Rollback.h"
-
 #include <stdint.h>
+#include <stdbool.h>
 
-// Rollback: copy toàn bộ dữ liệu từ Temp App (PARTITION_APP_BACKUP) sang Main App (PARTITION_APP_MAIN)
-bool Rollback_ToMainApp(void)
+#define ROLLBACK_BLOCK_SIZE 1024  // 1 KB block
+
+// Rollback: copy toàn bộ dữ liệu từ Main App sang Backup App
+bool Rollback_ToBackupApp(void)
 {
-    FlashPartitionInfo_t tempInfo, mainInfo;
-    if (!FlashManager_GetPartitionInfo(PARTITION_APP_BACKUP, &tempInfo))
-        return false;
+    FlashPartitionInfo_t mainInfo, backupInfo;
+
+    // Lấy thông tin partition
     if (!FlashManager_GetPartitionInfo(PARTITION_APP_MAIN, &mainInfo))
         return false;
-
-    // Buffer tạm để chứa dữ liệu temp app
-    uint8_t buffer[24*1024]; // 24KB, đúng với kích thước vùng temp/main
-
-    // Đọc dữ liệu từ Temp App
-    if (!FlashManager_ReadPartition(PARTITION_APP_BACKUP, buffer, tempInfo.size))
+    if (!FlashManager_GetPartitionInfo(PARTITION_APP_BACKUP, &backupInfo))
         return false;
 
-    // Xoá vùng Main App trước khi ghi
-    if (!FlashManager_ErasePartition(PARTITION_APP_MAIN))
+    // Xoá vùng Backup App trước khi ghi
+    if (!FlashManager_ErasePartition(PARTITION_APP_BACKUP))
         return false;
 
-    // Ghi dữ liệu từ buffer sang Main App
-    if (!FlashManager_WritePartition(PARTITION_APP_MAIN, 0, buffer, mainInfo.size))
-        return false;
+    // Buffer tạm để copy theo block
+    uint8_t buffer[ROLLBACK_BLOCK_SIZE];
+
+    uint32_t offset = 0;
+    while (offset < mainInfo.size)
+    {
+        uint32_t blockSize = (mainInfo.size - offset > ROLLBACK_BLOCK_SIZE) ? ROLLBACK_BLOCK_SIZE : (mainInfo.size - offset);
+
+        // Đọc dữ liệu từ Main App
+        if (!FlashManager_ReadPartitionOffset(PARTITION_APP_MAIN, buffer, blockSize, offset))
+            return false;
+
+        // Ghi dữ liệu sang Backup App
+        if (!FlashManager_WritePartition(PARTITION_APP_BACKUP, offset, buffer, blockSize))
+            return false;
+
+        offset += blockSize;
+    }
 
     return true;
 }

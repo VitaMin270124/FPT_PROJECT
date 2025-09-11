@@ -91,7 +91,7 @@ void BL_Run(void) {
     if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {
         if (BL_VerifyFirmware(PARTITION_APP_MAIN)) {
         	// Rollback_cpy .................
-        	while(!Rollback_ToMainApp())
+        	while(!Rollback_ToBackupApp())
             BL_JumpToApplication(PARTITION_APP_MAIN);
         } else if (BL_VerifyFirmware(PARTITION_APP_BACKUP)) {
             // Cập nhật cờ

@@ -101,6 +101,40 @@ bool FlashManager_ReadPartition(FlashPartitionId_t partId, uint8_t *buffer, uint
     return true;
 }
 
+
+#include <stdint.h>
+#include <stdbool.h>
+
+bool FlashManager_ReadPartitionOffset(FlashPartitionId_t partId, uint8_t *buffer, uint32_t length, uint32_t offset)
+{
+    if (partId >= PARTITION_MAX || buffer == NULL)
+        return false;
+
+    FlashPartitionInfo_t part = partitionTable[partId];
+
+    // Kiểm tra offset + length không vượt partition
+    if (offset >= part.size || length > (part.size - offset))
+        return false;
+
+    uint32_t addr = part.startAddress + offset;
+    uint32_t i = 0;
+
+    while (i < length) {
+        uint16_t halfword = FLASH_ReadHalfWord(addr);
+
+        buffer[i] = (uint8_t)(halfword & 0xFF);
+        if (i + 1 < length) {
+            buffer[i+1] = (uint8_t)(halfword >> 8);
+        }
+
+        addr += 2;
+        i += 2;
+    }
+
+    return true;
+}
+
+
 /* ===========================================================
  * Erase partition
  * =========================================================== */
@@ -125,4 +159,3 @@ bool FlashManager_ErasePartition(FlashPartitionId_t partId)
 
     return true;
 }
-

@@ -35,6 +35,7 @@ bool FlashManager_WritePartition(FlashPartitionId_t partId,
                                  uint32_t length);
 
 bool FlashManager_ReadPartition(FlashPartitionId_t partId, uint8_t *buffer, uint32_t length);
+bool FlashManager_ReadPartitionOffset(FlashPartitionId_t partId, uint8_t *buffer, uint32_t length, uint32_t offset);
 
 bool FlashManager_ErasePartition(FlashPartitionId_t partId);
 

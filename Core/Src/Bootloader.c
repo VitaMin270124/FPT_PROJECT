@@ -1,12 +1,4 @@
 
-#include "Bootloader.h"
-#include "cantp.h"
-#include "can.h"
-#include "FLASH_MANAGER.h"
-#include "FLASH_module.h"
-#include "Crc.h"
-#include "Clock.h"
-#include "Crc_Registers.h"
 
 
 static Bootflag_t current_flags;
@@ -60,6 +52,9 @@ bool BL_VerifyFirmware(FlashPartitionId_t partId) {
 
 bool BL_CheckForUpdateRequest(void) {
 
+	if(GPIO_ReadPin(BOOT_PIN) == PIN_SET)
+	        return true;  // Nhấn nút → bootloader nhận firmware
+
     if (current_flags.update_firmware == UPDATE_REQUEST) {
         Bootflag_t temp_flags = current_flags;
         temp_flags.update_firmware = 0; // Xóa cờ sau khi đã đọc
@@ -71,47 +66,58 @@ bool BL_CheckForUpdateRequest(void) {
 
 void BL_JumpToApplication(uint32_t app_address) {
     if (*(volatile uint32_t*)app_address != 0xFFFFFFFF) {
-        //__disable_irq();
+       __disable_irq();
        // CAN_DeInit(CAN1);
         uint32_t app_stack_pointer = *(volatile uint32_t*)app_address;
         uint32_t app_reset_handler_address = *(volatile uint32_t*)(app_address + 4);
         pFunction app_reset_handler = (pFunction)app_reset_handler_address;
+
+        // Set lại vector table để ngắt trỏ đúng về App
+        SCB->VTOR = app_address;
+        __DSB();
+        __ISB();
+
+        // Set MSP cho Application
         __set_MSP(app_stack_pointer);
+
+        __enable_irq();
+
         app_reset_handler();
     }
 }
 
-void BL_ReceiveAndFlashFirmware(void) {
-    uint8_t rx_data_buffer[256];
-    uint16_t received_length;
-    FlashPartitionInfo_t main_info;
-    FlashManager_GetPartitionInfo(PARTITION_APP_MAIN, &main_info);
-
-    firmware_received_count = 0;
-    FLASH_Unlock();
-    FlashManager_ErasePartition(PARTITION_APP_MAIN);
-
-    while (1) {
-        CANTP_MainFunction();
-        received_length = CANTP_ReadRxData(rx_data_buffer, sizeof(rx_data_buffer));
-
-        if (received_length > 0) {
-            if (FlashManager_WritePartition(PARTITION_APP_MAIN, rx_data_buffer, received_length) == false) {
-                 break;
-            }
-            firmware_received_count += received_length;
-            if (firmware_received_count >= main_info.size) {
-                break;
-            }
-        }
-    }
-    FLASH_Lock();
-
-    // Sau khi nạp xong, cập nhật CRC và cờ
-    current_flags.main_flag = BL_CalculateCRC(main_info.startAddress, main_info.size);
-    current_flags.boot_flag = FLAG_MAIN_APP_VALID;
-    BL_UpdateFlags(&current_flags);
-}
+//void BL_ReceiveAndFlashFirmware(void) {
+//    uint8_t rx_data_buffer[256];
+//    uint16_t received_length;
+//    firmware_received_count = 0;
+//
+//    FlashPartitionInfo_t main_info;
+//    FlashManager_GetPartitionInfo(PARTITION_APP_MAIN, &main_info);
+//
+//
+//
+//    FlashManager_ErasePartition(PARTITION_APP_MAIN);
+//
+//    while (1) {
+//        CANTP_MainFunction();
+//        received_length = CANTP_ReadRxData(rx_data_buffer, sizeof(rx_data_buffer));
+//
+//        if (received_length > 0) {
+//            if (FlashManager_WritePartition(PARTITION_APP_MAIN, rx_data_buffer, received_length) == false) {
+//                 break;
+//            }
+//            firmware_received_count += received_length;
+//            if (firmware_received_count >= main_info.size) {
+//                break;
+//            }
+//        }
+//    }
+//
+//    // Sau khi nạp xong, cập nhật CRC và cờ
+//    current_flags.main_flag = BL_CalculateCRC(main_info.startAddress, main_info.size);
+//    current_flags.boot_flag = FLAG_MAIN_APP_VALID;
+//    BL_UpdateFlags(&current_flags);
+//}
 
 void BL_Run(void) {
     CAN_Init(CAN_MODE_LOOPBACK,9600);
@@ -121,7 +127,11 @@ void BL_Run(void) {
     FlashManager_ReadPartition(PARTITION_DATA_FLAGS, (uint8_t*)&current_flags, sizeof(Bootflag_t));
 
     if (BL_CheckForUpdateRequest()) {
-        BL_ReceiveAndFlashFirmware();
+    	UDS_Init();
+    	while(!update_done) {
+    		UDS_MainFunction();
+    	}
+    	// Check CRC ....
     }
 
     if (current_flags.boot_flag == FLAG_MAIN_APP_VALID) {

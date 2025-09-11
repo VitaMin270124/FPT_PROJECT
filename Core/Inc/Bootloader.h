@@ -9,9 +9,13 @@
 #define INC_BOOTLOADER_H_
 
 #include <stdint.h>
-#include "cantp.h"
 #include "FLASH_MANAGER.h"
 #include "Bootloader_Flag.h"
+#include "Crc.h"
+#include "Clock.h"
+#include "Crc_Registers.h"
+#include "UDS.h"
+
 
 typedef void (*pFunction)(void);
 

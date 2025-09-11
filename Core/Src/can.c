@@ -52,3 +52,8 @@ uint8_t CAN_Receive(uint32_t *id, uint8_t *dlc, uint8_t *data) {
     }
     return 0; // Không có tin nhắn trong FIFO0
 }
+
+void CAN1_RX1_IRQHandler()
+{
+	CANTP_RxIndication();
+}

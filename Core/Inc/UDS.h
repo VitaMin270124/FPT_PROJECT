@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "cantp.h"
+#include "FLASH_MANAGER.h"
 
 // UDS Service IDs (ISO 14229-1)
 #define UDS_SID_DIAGNOSTIC_SESSION_CONTROL   0x10
@@ -28,8 +30,17 @@
 #define UDS_NRC_REQUEST_OUT_OF_RANGE         0x31
 #define UDS_NRC_SECURITY_ACCESS_DENIED       0x33
 
+// Typedef
+// Session Type
+typedef enum {
+    UDS_SESSION_DEFAULT     = 0x01,
+    UDS_SESSION_PROGRAMMING = 0x02,
+    UDS_SESSION_EXTENDED    = 0x03
+} UDS_SessionType;
+
 // API prototypes
-void UDS_Init(uint32_t req_id, uint32_t resp_id);
+void UDS_Init();
+UDS_SessionType UDS_GetCurrentSession(void);   // ------------ NEW  --------------- //
 void UDS_MainFunction(void);
 void UDS_RxIndication(uint32_t can_id, uint8_t *data, uint8_t dlc);
 void UDS_SendPositiveResponse(uint8_t sid, const uint8_t *data, uint16_t len);

@@ -4,26 +4,189 @@
  *  Created on: Sep 9, 2025
  *      Author: Minh
  */
-
-
 #include "uds.h"
-#include "cantp.h"
 #include <string.h>
+
+// Static variables
+static UDS_SessionType uds_active_session;
 
 static uint32_t uds_request_id;
 static uint32_t uds_response_id;
 
 static uint8_t uds_rx_buffer[256];
 static uint16_t uds_rx_length = 0;
+
+static uint32_t download_address;
+static uint32_t download_size;
+static uint32_t bytes_received;
+static uint8_t  block_counter;
+
 static bool uds_new_request = false;
 
-void UDS_Init(uint32_t req_id, uint32_t resp_id)
+// Static Functions
+static void UDS_HandleDiagnosticSessionControl(uint8_t *req, uint16_t len);
+static void UDS_HandleRequestDownload(uint8_t *reqData, uint16_t reqLen);
+static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen);
+static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen);
+
+// Global variables
+uint8_t update_done;
+
+// Global typedef
+FlashPartitionId_t update_partition;
+
+// Global Functions
+extern void CANTP_Transmit(uint32_t can_id, uint8_t *payload, uint16_t length);
+
+void UDS_Init()
 {
-    uds_request_id = req_id;
-    uds_response_id = resp_id;
+	uds_active_session = UDS_SESSION_DEFAULT;   // <-- Init to Default Session
+	update_done = 0;
+    uds_request_id = 0x7E0;
+    uds_response_id = 0x7E8;
     uds_rx_length = 0;
+    download_address   = 0;
+    download_size      = 0;
+    bytes_received     = 0;
+    block_counter      = 0;
     uds_new_request = false;
 }
+
+
+UDS_SessionType UDS_GetCurrentSession(void)
+{
+    return uds_active_session;
+}
+
+static void UDS_HandleDiagnosticSessionControl(uint8_t *req, uint16_t len)
+{
+    if (len < 2) {
+        UDS_SendNegativeResponse(UDS_SID_DIAGNOSTIC_SESSION_CONTROL,
+                                 UDS_NRC_INCORRECT_MESSAGE_LENGTH);
+        return;
+    }
+
+    uint8_t subFunction = req[1];
+
+    switch (subFunction)
+    {
+    case UDS_SESSION_DEFAULT:
+        uds_active_session = UDS_SESSION_DEFAULT;
+        UDS_SendPositiveResponse(UDS_SID_DIAGNOSTIC_SESSION_CONTROL,
+                                 &subFunction, 1);
+        break;
+
+    case UDS_SESSION_PROGRAMMING:
+        uds_active_session = UDS_SESSION_PROGRAMMING;
+        UDS_SendPositiveResponse(UDS_SID_DIAGNOSTIC_SESSION_CONTROL,
+                                 &subFunction, 1);
+        break;
+
+    case UDS_SESSION_EXTENDED:
+        uds_active_session = UDS_SESSION_EXTENDED;
+        UDS_SendPositiveResponse(UDS_SID_DIAGNOSTIC_SESSION_CONTROL,
+                                 &subFunction, 1);
+        break;
+
+    default:
+        UDS_SendNegativeResponse(UDS_SID_DIAGNOSTIC_SESSION_CONTROL,
+                                 UDS_NRC_SUBFUNCTION_NOT_SUPPORTED);
+        break;
+    }
+}
+
+static void UDS_HandleRequestDownload(uint8_t *reqData, uint16_t reqLen)
+{
+    if (reqLen >= 5) {
+        uint8_t dataFormatId = reqData[1];        // thường = 0x00
+        uint8_t addrLenFmtId = reqData[2];        // nibble thấp = addrLen, nibble cao = sizeLen
+
+        uint8_t addrLen = addrLenFmtId & 0x0F;    // số byte cho address
+        uint8_t sizeLen = (addrLenFmtId >> 4) & 0x0F; // số byte cho size
+
+        // Kiểm tra đủ dữ liệu trong request
+        if (reqLen < (3 + addrLen + sizeLen)) {
+               UDS_SendNegativeResponse(sid, 0x13);
+               return;
+        }
+
+        // Parse memoryAddress
+        download_address = 0;
+        for (uint8_t i = 0; i < addrLen; i++) {
+            download_address = (download_address << 8) | reqData[3 + i];
+        }
+
+        // Parse memorySize
+        download_size = 0;
+        for (uint8_t i = 0; i < sizeLen; i++) {
+            download_size = (download_size << 8) | reqData[3 + addrLen + i];
+        }
+
+        if(download_size > 24*1024) {
+        	UDS_SendNegativeResponse(sid, 0x13); // Incorrect Length
+        	return;
+        }
+
+        bytes_received = 0;
+        block_counter = 1;
+
+        if(0x08004000 <= download_address < 0x08010000)
+        	update_partition = PARTITION_APP_MAIN;
+        else if(0x08010000 <= download_address < 0x0801C000)
+        	update_partition = PARTITION_APP_BACKUP;
+        else {
+        	UDS_SendNegativeResponse(sid, 0x31); // REQUEST_OUT_OF_RANGE (ngoài vùng bộ nhớ được ghi)
+        	return;
+        }
+
+        FlashManager_ErasePartition(update_partitrion);
+
+        uint8_t resp[2] = {0x02, 0x00}; // MaxBlockLength=0x0200 = 512 bytes
+        UDS_SendPositiveResponse(sid, resp, 2);
+    } else {
+        UDS_SendNegativeResponse(sid, 0x13); // Incorrect Length
+    }
+    return;
+}
+
+static void UDS_HandleTransferData(uint8_t *reqData, uint16_t reqLen)
+{
+    if (reqLen > 2) {
+        uint8_t blockNum = reqData[1];
+        if (blockNum != block_counter) {
+            UDS_SendNegativeResponse(sid, 0x73); // Wrong Block Sequence Counter
+            return;
+        }
+
+        uint8_t *data = &reqData[2];
+        uint16_t dataLen = reqLen - 2;
+
+        if(uds_active_session != UDS_SESSION_PROGRAMMING) {
+        	UDS_SendNegativeResponse(sid, 0x22); // CONDITIONS_NOT_CORRECT
+        	return;
+        }
+        FlashManager_WritePartition(update_partition, download_address + bytes_received, data, dataLen);
+        bytes_received += dataLen;
+        block_counter++;
+
+        uint8_t resp[1] = {blockNum};
+        UDS_SendPositiveResponse(sid, resp, 1);
+    } else {
+        UDS_SendNegativeResponse(sid, 0x13);
+    }
+    return;
+}
+
+static void UDS_HandleTransferExit(uint8_t *reqData, uint16_t reqLen)
+{
+    if (bytes_received == download_size) {
+        UDS_SendPositiveResponse(sid, NULL, 0);
+    } else {
+        UDS_SendNegativeResponse(sid, 0x72); // General programming failure
+    }
+    return;
+}
+
 
 void UDS_MainFunction(void)
 {
@@ -35,10 +198,8 @@ void UDS_MainFunction(void)
         switch (sid)
         {
         case UDS_SID_DIAGNOSTIC_SESSION_CONTROL:
-            // ví dụ: phản hồi "default session active"
             {
-                uint8_t resp[2] = { sid + 0x40, 0x01 };
-                UDS_SendPositiveResponse(sid, resp + 1, 1);
+            	UDS_HandleDiagnosticSessionControl(uds_rx_buffer, uds_rx_length);
             }
             break;
 
@@ -58,18 +219,16 @@ void UDS_MainFunction(void)
             break;
 
         case UDS_SID_REQUEST_DOWNLOAD:
-            // TODO: implement flash download sequence
-            UDS_SendPositiveResponse(sid, NULL, 0);
+        	UDS_HandleRequestDownload(uds_rx_buffer, uds_rx_length);
             break;
 
         case UDS_SID_TRANSFER_DATA:
-            // TODO: handle data block write
-            UDS_SendPositiveResponse(sid, NULL, 0);
+        	UDS_HandleTransferData(uds_rx_buffer, uds_rx_length);
             break;
 
         case UDS_SID_REQUEST_TRANSFER_EXIT:
-            // TODO: finalize flash programming
-            UDS_SendPositiveResponse(sid, NULL, 0);
+        	UDS_HandleTransferExit(uds_rx_buffer, uds_rx_length);
+        	update_done = 1;
             break;
 
         default:

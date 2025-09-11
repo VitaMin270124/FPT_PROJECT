@@ -3,3 +3,4 @@
 ../Core/Src/cantp.c:36:6:CANTP_Transmit	2
 ../Core/Src/cantp.c:63:6:CANTP_RxIndication	8
 ../Core/Src/cantp.c:117:6:CANTP_MainFunction	4
+../Core/Src/cantp.c:136:6:CANTP_SendFlowControl	1

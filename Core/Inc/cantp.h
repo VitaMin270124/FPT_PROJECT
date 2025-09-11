@@ -54,7 +54,7 @@ void CANTP_RxIndication(uint32_t can_id, uint8_t *data, uint8_t dlc);
 
 // --------- Callback to UDS Layer ---------
 void UDS_RxIndication(uint32_t can_id, uint8_t *data, uint8_t len);
-
+void CANTP_SendFlowControl(uint32_t can_id, uint8_t flow_status, uint8_t block_size, uint8_t st_min);
 
 
 #endif /* INC_CANTP_H_ */

@@ -133,5 +133,21 @@ void CANTP_MainFunction(void) {
         }
     }
 }
+void CANTP_SendFlowControl(uint32_t can_id, uint8_t flow_status, uint8_t block_size, uint8_t st_min)
+{
+	 uint8_t can_frame_data[8] = {0}; // Mảng 8 byte được khởi tạo bằng 0
 
+	    // Byte 0: N_PCI (Network Protocol Control Information)
+	    // 4 bit cao: Loại khung FC (0x30)
+	    // 4 bit thấp: Trạng thái luồng (flow_status)
+	    can_frame_data[0] = CANTP_FRAME_TYPE_FC | (flow_status & 0x0F);
+
+	    can_frame_data[1] = block_size;
+
+	    can_frame_data[2] = st_min;
+
+	    // Sử dụng hàm CAN_Transmit đã cung cấp
+	    // DLC của khung FC là 8 theo chuẩn, ngay cả khi chỉ có 3 byte được sử dụng.
+	    return CAN_Transmit(can_id, 8, can_frame_data);
+}
 

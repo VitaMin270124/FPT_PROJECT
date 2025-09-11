@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+/* ==================== CAN REGISTERS ==================== */
 typedef struct {
     volatile uint32_t MCR;
     volatile uint32_t MSR;
@@ -17,15 +18,15 @@ typedef struct {
 typedef struct {
     volatile uint32_t TIR;
     volatile uint32_t TDTR;
-    volatile uint32_t TDL;
-    volatile uint32_t TDH;
+    volatile uint32_t TDLR;
+    volatile uint32_t TDHR;
 } CAN_TxMailbox_TypeDef;
 
 typedef struct {
     volatile uint32_t RIR;
     volatile uint32_t RDTR;
-    volatile uint32_t RDL;
-    volatile uint32_t RDH;
+    volatile uint32_t RDLR;
+    volatile uint32_t RDHR;
 } CAN_RxMailbox_TypeDef;
 
 typedef struct {
@@ -46,44 +47,40 @@ typedef struct {
     CAN_FilterRegister_TypeDef sFilterRegister[14]; /*!< 14 filter banks */
 } CAN_Filter_TypeDef;
 
-typedef enum {
-	DISABLE = 0x00,
-	ENABLE = 0x01
-} FunctionalState;
-
-// === Base addresses ===
+/* ==================== BASE ADDRESSES ==================== */
 #define CAN1_BASE             (0x40006400UL)
 #define CAN1                  ((CAN_TypeDef *) CAN1_BASE)
-
 #define CAN1_TX_MAILBOX_0     ((CAN_TxMailbox_TypeDef *) (CAN1_BASE + 0x180UL))
 #define CAN1_RX_MAILBOX_0     ((CAN_RxMailbox_TypeDef *) (CAN1_BASE + 0x1B0UL))
 #define CAN1_RX_MAILBOX_1     ((CAN_RxMailbox_TypeDef *) (CAN1_BASE + 0x1C0UL))
 
-// === CAN modes ===
+#define CAN_FILTER_BASE       (0x40006600UL)
+#define CAN_FILTER            ((CAN_Filter_TypeDef *) CAN_FILTER_BASE)
+
+/* ==================== ENUM & DEFINES ==================== */
+typedef enum {
+    DISABLE = 0x00,
+    ENABLE = 0x01
+} FunctionalState;
+
 #define CAN_MODE_NORMAL       0x00
 #define CAN_MODE_SILENT       0x01
 #define CAN_MODE_LOOPBACK     0x02
 #define CAN_MODE_LOOPBACK_SILENT 0x03
 
-// === Interrupt bits ===
-#define CAN_IER_FMPIE0   ((uint32_t)0x00000002)  // bit interupt FIFO0
+/* CAN IER bits */
+#define CAN_IER_FMPIE0        ((uint32_t)0x00000002)  // FIFO0 message pending interrupt
 
-// Filter registers base (the filter banks are shared between CAN1/CAN2)
-#define CAN_FILTER_BASE       (0x40006600UL)
-#define CAN_FILTER            ((CAN_Filter_TypeDef *) CAN_FILTER_BASE)
+/* CAN FMR bits */
+#define CAN_FMR_FINIT         ((uint32_t)0x00000001)
 
+/* ==================== API ==================== */
 void CAN_Init(uint8_t mode, uint32_t baud_rate_prescaler);
 uint8_t CAN_Transmit(uint32_t id, uint8_t dlc, uint8_t *data);
 uint8_t CAN_Receive(uint32_t *id, uint8_t *dlc, uint8_t *data);
 void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState);
 
-/*
-filterBank: số thứ tự filter (0..13 với STM32F103).
-id: ID muốn lọc (chuẩn 11-bit).
-mask: mask để quyết định bit nào cần so sánh (0 = don’t care, 1 = phải khớp).
-fifoAssign: chọn đưa vào FIFO0 (0) hay FIFO1 (1).
-*/
+/* New API for filter configuration */
 void CAN_FilterInit(uint8_t filterBank, uint32_t id, uint32_t mask, uint8_t fifoAssign);
-
 
 #endif // __CAN_H

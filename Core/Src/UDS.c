@@ -45,7 +45,7 @@ void UDS_Init()
 	update_done = 0;
 	receivedCRC = 0;
     uds_request_id = 0x7E0;
-    uds_response_id = 0x7E8;
+    uds_response_id = 0x7E0;
     uds_rx_length = 0;
     download_address   = 0;
     download_size      = 0;

@@ -55,7 +55,7 @@ typedef struct {
 #define __ISB() __asm volatile ("isb sy" ::: "memory")
 #endif
 #ifndef __set_MSP
-#define __set_MSP(msp) __asm volatile ("msr msp, %0\n" : : "r" (msp) : "sp")
+#define __set_MSP(msp) __asm volatile ("msr msp, %0" : : "r" (msp) : "memory")
 #endif
 #ifndef __disable_irq
 #define __disable_irq() __asm volatile ("cpsid i" : : : "memory")

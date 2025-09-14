@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "FLASH_module.h"   // FLASH driver low level
 
 typedef enum {
     PARTITION_BOOTLOADER = 0,

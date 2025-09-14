@@ -60,8 +60,8 @@ all: main-build
 main-build: FPT_PROJECT.elf secondary-outputs
 
 # Tool invocations
-FPT_PROJECT.elf FPT_PROJECT.map: $(OBJS) $(USER_OBJS) C:\Users\huynh\FSOFT\Project\FPT_PROJECT\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "FPT_PROJECT.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\huynh\FSOFT\Project\FPT_PROJECT\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FPT_PROJECT.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+FPT_PROJECT.elf FPT_PROJECT.map: $(OBJS) $(USER_OBJS) C:\Users\Minh\Desktop\workspace\Final_Branch\FPT_PROJECT\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "FPT_PROJECT.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Minh\Desktop\workspace\Final_Branch\FPT_PROJECT\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FPT_PROJECT.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -6,7 +6,6 @@
  */
 /* Includes ------------------------------------------------------------------*/
 #include "FLASH_MANAGER.h"
-#include "FLASH_module.h"   // FLASH driver low level
 
 /* Partition map */
 static const FlashPartitionInfo_t partitionTable[PARTITION_MAX] = {

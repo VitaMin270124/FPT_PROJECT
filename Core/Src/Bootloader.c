@@ -2,7 +2,7 @@
 
 
 static Bootflag_t current_flags;
-static uint32_t firmware_received_count = 0;
+//static uint32_t firmware_received_count = 0;
 
 uint32_t BL_CalculateCRC(uint32_t start_address, uint32_t length) {
     // Bootloader chỉ wrap lại cho tiện dụng
@@ -27,7 +27,7 @@ bool BL_VerifyFirmware(FlashPartitionId_t partId) {
     }
     current_flags.CRC = receivedCRC;
     uint32_t calculated_crc = BL_CalculateCRC(info.startAddress, info.size);
-    if(calculated_crc = current_flags.CRC)
+    if(calculated_crc == current_flags.CRC)
     	return true;
     else
     	return false;
